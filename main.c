@@ -1,10 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+
 void generateDeck();
-void printDeck();
 void printTable();
 void flipCard();
+
 struct Card{
     int index;
     int shown;
@@ -21,28 +22,9 @@ struct Card* prevCard;
 int main() {
     generateDeck();
 
-    // HVERT ANDET KORT FLIPPET
-    newCard = head;
-    for (int i = 0; i < 52; i++){
-        if (i % 2 == 1) flipCard(1);
-        newCard = newCard->next;
-    }
-    printTable();
+    newCard = head->next->next->next->next;
+    flipCard(1);
 
-    // ALLE KORT FLIPPET
-    newCard = head;
-    for (int i = 0; i < 52; i++){
-        flipCard(1);
-        newCard = newCard->next;
-    }
-    printTable();
-
-    // INGEN KORT FLIPPET
-    newCard = head;
-    for(int i = 0; i < 52; i++){
-        flipCard(0);
-        newCard = newCard->next;
-    }
     printTable();
 
     return 0;
@@ -95,6 +77,8 @@ void generateDeck(){
         newCard->suit = suit;
         newCard->value = value;
     }
+
+
 }
 
 void printDeck(){
@@ -113,6 +97,7 @@ void printDeck(){
 void flipCard(int in){
     newCard->shown = in;
 }
+
 void printTable(){
     newCard = head;
     printf("C1\tC2\tC3\tC4\tC5\tC6\tC7\n\n");
@@ -173,21 +158,4 @@ void printTable(){
         newCard = newCard->next;
     }
     printf("\n\n\n");
-}
-
-/**
- * Code concept from https://stackoverflow.com/questions/6127503/shuffle-array-in-c
- * @param array
- * @param n
- */
-void shuffle(int *array, size_t n){
-    if (n > 1){
-        size_t i;
-        for (i = 0; i < n-1; i++){
-            size_t j = i + rand() / (RAND_MAX / (i - n) + 1);
-            int t = array[i];
-            array[j] = array[i];
-            array[i] = t;
-        }
-    }
 }
