@@ -19,11 +19,14 @@ struct Card* prevCard;
 
 int main() {
     generateDeck();
-    newCard = head;
     printDeck();
-    flipCard(newCard);
-    printTable();
 
+    newCard = head;
+    for (int i = 0; i < 52; i++){
+        if (i % 2 == 1) flipCard(1);
+        newCard = newCard->next;
+    }
+    printTable();
 
     return 0;
 }
@@ -86,10 +89,9 @@ void printDeck(){
         newCard = newCard->next;
     }
 }
-void flipCard(struct Card* current){
-    current = head;
-    if (current->shown == 0) current->shown = 1;
-    else current->shown = 0;
+
+void flipCard(int in){
+    newCard->shown = in;
 }
 void printTable(){
     newCard = head;
