@@ -6,6 +6,7 @@ void printDeck();
 void printTable();
 void flipCard();
 struct Card{
+    int index;
     int shown;
     int value;
     int suit;
@@ -19,11 +20,27 @@ struct Card* prevCard;
 
 int main() {
     generateDeck();
-    printDeck();
 
+    // HVERT ANDET KORT FLIPPET
     newCard = head;
     for (int i = 0; i < 52; i++){
         if (i % 2 == 1) flipCard(1);
+        newCard = newCard->next;
+    }
+    printTable();
+
+    // ALLE KORT FLIPPET
+    newCard = head;
+    for (int i = 0; i < 52; i++){
+        flipCard(1);
+        newCard = newCard->next;
+    }
+    printTable();
+
+    // INGEN KORT FLIPPET
+    newCard = head;
+    for(int i = 0; i < 52; i++){
+        flipCard(0);
         newCard = newCard->next;
     }
     printTable();
@@ -40,10 +57,12 @@ void generateDeck(){
     // Suit 4 = Spades (S)
     //------------------------------------------------------------------------------------------------------------------
 
+    int index = 0;
     int value = 1;
     int suit = 1;
 
     head = (struct Card*)malloc(sizeof(struct Card));
+    head->index = index;
     head->suit = suit;
     head->value = value;
     head->shown = 0;
@@ -53,6 +72,7 @@ void generateDeck(){
 
 
     for (int i = 0; i < 51; i++) {
+        index++;
         value++;
         if (value > 13) {
             value = 1;
@@ -60,7 +80,7 @@ void generateDeck(){
         }
         newCard = (struct Card *) malloc(sizeof(struct Card));
         newCard->shown = 0;
-
+        newCard->index = index;
         if (suit == 1 && value == 2) {
             newCard->previous = head;
             newCard->next = NULL;
@@ -95,21 +115,79 @@ void flipCard(int in){
 }
 void printTable(){
     newCard = head;
-    printf("C1\tC2\tC3\tC4\tC5\tC6\tC7\n");
-    int counter = 0;
+    printf("C1\tC2\tC3\tC4\tC5\tC6\tC7\n\n");
+    int rowNumber = 0;
+    int lineNumber = 0;
     for (int i = 0; i < 52; i++){
-        counter++;
+        rowNumber++;
         if (newCard->shown == 0) printf("[]\t");
         else switch (newCard->suit){
-            case(1): printf("%dC\t", newCard->value); break;
-            case(2): printf("%dD\t", newCard->value); break;
-            case(3): printf("%dH\t", newCard->value); break;
-            case(4): printf("%dS\t", newCard->value); break;
+            case(1): {
+                switch (newCard->value){
+                    case(1): printf("AC\t"); break;
+                    case(11): printf("JC\t"); break;
+                    case(12): printf("QC\t"); break;
+                    case(13): printf("KC\t"); break;
+                    default: printf("%dC\t", newCard->value); break;
+                }
+                break;
+            }
+            case(2): {
+                switch (newCard->value){
+                    case(1): printf("AD\t"); break;
+                    case(11): printf("JD\t"); break;
+                    case(12): printf("QD\t"); break;
+                    case(13): printf("KD\t"); break;
+                    default: printf("%dD\t", newCard->value); break;
+                }
+                break;
+            }
+            case(3): {
+                switch (newCard->value){
+                    case(1): printf("AH\t"); break;
+                    case(11): printf("JH\t"); break;
+                    case(12): printf("QH\t"); break;
+                    case(13): printf("KH\t"); break;
+                    default: printf("%dH\t", newCard->value); break;
+                }
+                break;
+            }
+            case(4): {
+                switch (newCard->value){
+                    case(1): printf("AS\t"); break;
+                    case(11): printf("JS\t"); break;
+                    case(12): printf("QS\t"); break;
+                    case(13): printf("KS\t"); break;
+                    default: printf("%dS\t", newCard->value); break;
+                }
+                break;
+            }
         }
-        if (counter == 7){
+        if (rowNumber == 7){
+            lineNumber++;
+            if (lineNumber % 2 == 1) printf("\t\t[]\tF%d", (lineNumber/2)+1);
+
             printf("\n");
-            counter = 0;
+            rowNumber = 0;
         }
         newCard = newCard->next;
+    }
+    printf("\n\n\n");
+}
+
+/**
+ * Code concept from https://stackoverflow.com/questions/6127503/shuffle-array-in-c
+ * @param array
+ * @param n
+ */
+void shuffle(int *array, size_t n){
+    if (n > 1){
+        size_t i;
+        for (i = 0; i < n-1; i++){
+            size_t j = i + rand() / (RAND_MAX / (i - n) + 1);
+            int t = array[i];
+            array[j] = array[i];
+            array[i] = t;
+        }
     }
 }
