@@ -1,88 +1,34 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
+#include "Card.h"
 
 
-void generateDeck();
 void printTable();
-void flipCard();
+//struct Card* shuffleDeck();
+int arrayGenerator();
 
-struct Card{
-    int index;
-    int shown;
-    int value;
-    int suit;
-    struct Card* next;
-    struct Card* previous;
 
-};
-struct Card* newCard;
-struct Card* head;
-struct Card* prevCard;
 
 int main() {
-    generateDeck();
+    struct Card* head = generateDeck();
+    //struct Card* sHead = shuffleDeck();
 
-    newCard = head->next->next->next->next;
-    flipCard(1);
+    struct Card* newCard = head;
+
+    for (int i = 0; i < 52; i++){
+        flipCard(newCard, true);
+        newCard = newCard->next;
+    }
 
     printTable();
 
     return 0;
 }
 
-void generateDeck(){
 
-    //------------------------------------------------------------------------------------------------------------------
-    // Suit 1 = Clubs (C)
-    // Suit 2 = Diamonds (D)
-    // Suit 3 = Hearts (H)
-    // Suit 4 = Spades (S)
-    //------------------------------------------------------------------------------------------------------------------
-
-    int index = 0;
-    int value = 1;
-    int suit = 1;
-
-    head = (struct Card*)malloc(sizeof(struct Card));
-    head->index = index;
-    head->suit = suit;
-    head->value = value;
-    head->shown = 0;
-    head->previous = NULL;
-    head->next = NULL;
-
-
-
-    for (int i = 0; i < 51; i++) {
-        index++;
-        value++;
-        if (value > 13) {
-            value = 1;
-            suit++;
-        }
-        newCard = (struct Card *) malloc(sizeof(struct Card));
-        newCard->shown = 0;
-        newCard->index = index;
-        if (suit == 1 && value == 2) {
-            newCard->previous = head;
-            newCard->next = NULL;
-            head->next = newCard;
-            prevCard = newCard;
-        } else {
-            newCard->previous = prevCard;
-            newCard->next = NULL;
-            prevCard->next = newCard;
-            prevCard = newCard;
-        }
-        newCard->suit = suit;
-        newCard->value = value;
-    }
-
-
-}
-
-void printDeck(){
-    newCard = head;
+void printDeck(struct Card* head){
+    struct Card* newCard = head;
     for (int i = 0; i < 52; i++){
         switch (newCard->suit){
             case(1): printf("%d of Clubs\n", newCard->value); break;
@@ -94,12 +40,11 @@ void printDeck(){
     }
 }
 
-void flipCard(int in){
-    newCard->shown = in;
-}
 
-void printTable(){
-    newCard = head;
+
+void printTable(struct Card* head){
+
+    struct Card* newCard = head;
     printf("C1\tC2\tC3\tC4\tC5\tC6\tC7\n\n");
     int rowNumber = 0;
     int lineNumber = 0;
@@ -159,3 +104,42 @@ void printTable(){
     }
     printf("\n\n\n");
 }
+
+/* struct Card* shuffleDeck(){
+    struct Card* newCard;
+    struct Card* head;
+    struct Card* prevCard;
+
+    int array[52];
+    for (int i = 0; i < 52; i++){
+        array[i] = i+1;
+    }
+
+    int index = 0;
+    int value = array[0] % 14;
+
+
+    head = (struct Card*)malloc(sizeof(struct Card));
+    head->index = index;
+    head->suit = suit;
+    head->value = value;
+    head->shown = 0;
+    head->previous = NULL;
+    head->next = NULL;
+
+    int n = 52;
+
+    // Source: https://benpfaff.org/writings/clc/shuffle.html
+    size_t i;
+    for (i = 0; i < n-1; i++){
+        size_t j = i + rand() / (RAND_MAX / (n - i) + 1);
+        int t = array[j];
+        array[j] = array[i];
+        array[i] = t;
+    }
+
+    for (int i = 0; i < 51; i++)
+
+    return head;
+}
+*/
