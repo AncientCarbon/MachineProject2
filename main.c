@@ -55,7 +55,7 @@ void printTable(struct Card* head){
         if (!newCard->shown) printf("[]\t");
         else switch(newCard->value){
             case(1): printf("A%c\t", newCard->suit); break;
-            case(10)
+            case(10): printf("T%c\t", newCard->suit); break;
             case(11): printf("J%c\t", newCard->suit); break;
             case(12): printf("Q%c\t", newCard->suit); break;
             case(13): printf("K%c\t", newCard->suit); break;
