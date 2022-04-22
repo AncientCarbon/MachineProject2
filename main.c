@@ -9,9 +9,51 @@ void printTable();
 int arrayGenerator();
 
 
-
 int main() {
-    struct Card* head = generateDeck();
+    struct Card* head;
+    struct Card* newCard;
+    struct Card* prevCard;
+
+    char cmd1;
+    char cmd2;
+
+    printf("Command: ");
+    scanf("%c%c", &cmd1, &cmd2);
+
+    FILE * file;
+    if (cmd1 == 'L' && cmd2 == 'D'){
+        file = fopen("C:\\Users\\bruger\\CLionProjects\\MachineProject2\\UnshuffledDeck.txt", "rt");
+        rewind(file);
+        if (file == NULL){
+            printf("File not found");
+        }
+        else printf("File found");
+
+        head = (struct Card *) malloc(sizeof(struct Card));
+        fscanf(file, "%c%c", head->value, head->suit);
+        head->shown = true;
+        head->next = NULL;
+        head->previous = NULL;
+        prevCard = head;
+        for (int i = 0; i < 51; i++){
+            newCard = (struct Card *) malloc(sizeof(struct Card));
+            newCard->previous = prevCard;
+            prevCard->next = newCard;
+            newCard->next = NULL;
+            newCard->shown = true;
+            fscanf(file, "%c%c", newCard->value, newCard->suit);
+            prevCard = newCard;
+        }
+
+        newCard = head;
+        for (int i = 0; i < 52; i++){
+            printf("%c%c", newCard->value, newCard->suit);
+            newCard = newCard->next;
+        }
+    }
+
+
+    /*struct Card* head = generateDeck();
     //struct Card* sHead = shuffleDeck();
 
     struct Card* newCard = head;
@@ -22,6 +64,7 @@ int main() {
     }
 
     printTable(head);
+    */
 
     return 0;
 }

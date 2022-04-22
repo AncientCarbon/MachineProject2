@@ -11,7 +11,7 @@ enum suit;
 struct Card{
     int index;
     bool shown;
-    int value;
+    char value;
     char suit;
     struct Card* next;
     struct Card* previous;
