@@ -42,6 +42,7 @@ struct Card* generateDeck(){
                 case(1): suit = 'D'; break;
                 case(2): suit = 'H'; break;
                 case(3): suit = 'S'; break;
+                default: break;
             }
         }
         newCard = (struct Card *) malloc(sizeof(struct Card));
@@ -59,4 +60,8 @@ struct Card* generateDeck(){
 
 void flipCard(struct Card* newCard, bool in){
     newCard->shown = in;
+}
+
+void loadFile(){
+
 }

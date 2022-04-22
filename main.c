@@ -21,7 +21,7 @@ int main() {
         newCard = newCard->next;
     }
 
-    printTable();
+    printTable(head);
 
     return 0;
 }
@@ -45,13 +45,24 @@ void printDeck(struct Card* head){
 void printTable(struct Card* head){
 
     struct Card* newCard = head;
+
     printf("C1\tC2\tC3\tC4\tC5\tC6\tC7\n\n");
+
     int rowNumber = 0;
     int lineNumber = 0;
     for (int i = 0; i < 52; i++){
         rowNumber++;
-        if (newCard->shown == 0) printf("[]\t");
-        else switch (newCard->suit){
+        if (!newCard->shown) printf("[]\t");
+        else switch(newCard->value){
+            case(1): printf("A%c\t", newCard->suit); break;
+            case(10)
+            case(11): printf("J%c\t", newCard->suit); break;
+            case(12): printf("Q%c\t", newCard->suit); break;
+            case(13): printf("K%c\t", newCard->suit); break;
+            default: printf("%d%c\t", newCard->value, newCard->suit); break;
+        }
+
+        /*else switch (newCard->suit){
             case(1): {
                 switch (newCard->value){
                     case(1): printf("AC\t"); break;
@@ -92,7 +103,7 @@ void printTable(struct Card* head){
                 }
                 break;
             }
-        }
+        }*/
         if (rowNumber == 7){
             lineNumber++;
             if (lineNumber % 2 == 1) printf("\t\t[]\tF%d", (lineNumber/2)+1);
