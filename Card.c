@@ -69,8 +69,9 @@ struct Card* generateDeck(){
     return head;
 }
 
-void flipCard(struct Card* newCard, bool in){
-    newCard->shown = in;
+void flipCard(struct Card* newCard){
+    if (newCard->shown) newCard->shown = false;
+    else newCard->shown = true;
 }
 
 void loadFile(){
