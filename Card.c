@@ -77,3 +77,42 @@ void flipCard(struct Card* newCard){
 void loadFile(){
 
 }
+
+/*struct Card* shuffleDeck(){
+    struct Card* newCard;
+    struct Card* head;
+    struct Card* prevCard;
+
+    int array[52];
+    for (int i = 0; i < 52; i++){
+        array[i] = i+1;
+    }
+
+    int index = 0;
+    int value = array[0] % 14;
+
+
+    head = (struct Card*)malloc(sizeof(struct Card));
+    head->index = index;
+    head->suit = suit;
+    head->value = value;
+    head->shown = 0;
+    head->previous = NULL;
+    head->next = NULL;
+
+    int n = 52;
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Source: https://benpfaff.org/writings/clc/shuffle.html
+    // Shuffles an array from 1-52
+    //------------------------------------------------------------------------------------------------------------------
+    size_t i;
+    for (i = 0; i < n-1; i++){
+        size_t j = i + rand() / (RAND_MAX / (n - i) + 1);
+        int t = array[j];
+        array[j] = array[i];
+        array[i] = t;
+    }
+
+    return head;
+}*/

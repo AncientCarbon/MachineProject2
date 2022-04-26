@@ -21,9 +21,9 @@ int main() {
     scanf("%c%c", &cmd1, &cmd2);
 
     FILE * file;
-    char line[2];
+    char line[5];
     if (cmd1 == 'L' && cmd2 == 'D'){
-        file = fopen("UnshuffledDeck.txt", "rt");
+        file = fopen("..\\UnshuffledDeck.txt", "rt");
         int cur_line = 1; //sat til 1 pga head der bliver lavet uden for loop
         if (file == NULL){
             printf("File not found, loading default deck\n\n");
@@ -31,22 +31,26 @@ int main() {
         }
         else {
 
-            printf("File found");
+            printf("File found\n\n");
             head = (struct Card *) malloc(sizeof(struct Card));
             head->shown = true;
             head->next = NULL;
             head->previous = NULL;
             prevCard = head;
+            fgets(line, 4, file);
+            //sscanf(line, "%c%c\n", head->value, head->suit);
+            head->value = line[0];
+            head->suit = line[1];
 
-            fscanf(file, "%c%c\n", head->value, head->suit);
-
-            while (fgets(line, 3, file) != NULL){
+            while (fgets(line, 4, file) != NULL){
                 newCard = (struct Card *) malloc(sizeof(struct Card));
                 newCard->previous = prevCard;
                 prevCard->next = newCard;
                 newCard->next = NULL;
                 newCard->shown = true;
-                sscanf(line, "%c%c\n", newCard->value, newCard->suit);
+                newCard->value = line[0];
+                newCard->suit = line[1];
+                prevCard = newCard;
                 cur_line++;
             }
         }
@@ -82,42 +86,3 @@ void printTable(struct Card* head){
     }
     printf("\n\n\n");
 }
-
-/* struct Card* shuffleDeck(){
-    struct Card* newCard;
-    struct Card* head;
-    struct Card* prevCard;
-
-    int array[52];
-    for (int i = 0; i < 52; i++){
-        array[i] = i+1;
-    }
-
-    int index = 0;
-    int value = array[0] % 14;
-
-
-    head = (struct Card*)malloc(sizeof(struct Card));
-    head->index = index;
-    head->suit = suit;
-    head->value = value;
-    head->shown = 0;
-    head->previous = NULL;
-    head->next = NULL;
-
-    int n = 52;
-
-    // Source: https://benpfaff.org/writings/clc/shuffle.html
-    size_t i;
-    for (i = 0; i < n-1; i++){
-        size_t j = i + rand() / (RAND_MAX / (n - i) + 1);
-        int t = array[j];
-        array[j] = array[i];
-        array[i] = t;
-    }
-
-    for (int i = 0; i < 51; i++)
-
-    return head;
-}
-*/
