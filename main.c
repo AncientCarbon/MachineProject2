@@ -82,21 +82,6 @@ int main() {
 }
 
 
-void printDeck(struct Card* head){
-    struct Card* newCard = head;
-    for (int i = 0; i < 52; i++){
-        switch (newCard->suit){
-            case(1): printf("%d of Clubs\n", newCard->value); break;
-            case(2): printf("%d of Diamonds\n", newCard->value); break;
-            case(3): printf("%d of Hearts\n", newCard->value); break;
-            case(4): printf("%d of Spades\n", newCard->value); break;
-        }
-        newCard = newCard->next;
-    }
-}
-
-
-
 void printTable(struct Card* head){
 
     struct Card* newCard = head;
