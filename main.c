@@ -5,6 +5,7 @@
 
 
 void printTable(struct Card* head);
+void showAllCards(struct Card* head);
 //struct Card* shuffleDeck();
 int arrayGenerator();
 
@@ -24,7 +25,6 @@ int main() {
     char line[5];
     if (cmd1 == 'L' && cmd2 == 'D'){
         file = fopen("..\\UnshuffledDeck.txt", "rt");
-        int cur_line = 1; //sat til 1 pga head der bliver lavet uden for loop
         if (file == NULL){
             printf("File not found, loading default deck\n\n");
             head = generateDeck();
@@ -33,12 +33,14 @@ int main() {
 
             printf("File found\n\n");
             head = (struct Card *) malloc(sizeof(struct Card));
-            head->shown = true;
+            head->shown = false;
             head->next = NULL;
             head->previous = NULL;
             prevCard = head;
             fgets(line, 4, file);
-            //sscanf(line, "%c%c\n", head->value, head->suit);
+
+            // line er et char array som fgets læser information ind i.
+            // Derfor kaldes line[0] og line[1]
             head->value = line[0];
             head->suit = line[1];
 
@@ -47,15 +49,47 @@ int main() {
                 newCard->previous = prevCard;
                 prevCard->next = newCard;
                 newCard->next = NULL;
-                newCard->shown = true;
+                newCard->shown = false;
                 newCard->value = line[0];
                 newCard->suit = line[1];
                 prevCard = newCard;
-                cur_line++;
             }
         }
+    }
 
-        printTable(head);
+    while (true){
+        char dumpCmd;
+        printf("Command: ");
+        scanf("%c%c%c", &cmd1, &cmd2, &dumpCmd);
+        if (cmd1 == '\n'){
+            cmd1 = cmd2;
+            cmd2 = dumpCmd;
+        }
+        if (cmd1 == 'Q' && cmd2 == 'Q'){
+            printf("Quitting program...\n");
+            break;
+        }
+        else if (cmd1 == 'S' && cmd2 == 'W'){
+            showAllCards(head);
+            printTable(head);
+            printf("");
+        }
+        else if (cmd1 == 'S' && cmd2 == 'I'){
+            printf("Command not implemented\n");
+        }
+        else if (cmd1 == 'S' && cmd2 == 'R'){
+            printf("Command not implemented\n");
+        }
+        else if (cmd1 == 'S' && cmd2 == 'D'){
+            printf("Command not implemented\n");
+        }
+        else if (cmd1 == 'P' && cmd2 == '\n'){
+            printf("Command not implemented\n");
+        }
+        else if (cmd1 == 'Q' && cmd2 == '\n'){
+            printf("Command not implemented\n");
+        }
+        else printf("Command not recognized\n");
     }
 
     return 0;
@@ -77,7 +111,7 @@ void printTable(struct Card* head){
 
         if (rowNumber == 7){
             lineNumber++;
-            if (lineNumber % 2 == 1) printf("\t\t[]\tF%d", (lineNumber/2)+1);
+            if (lineNumber % 2 == 1 && lineNumber <= 8) printf("\t\t[]\tF%d", (lineNumber/2)+1);
 
             printf("\n");
             rowNumber = 0;
@@ -85,4 +119,12 @@ void printTable(struct Card* head){
         newCard = newCard->next;
     }
     printf("\n\n\n");
+}
+
+void showAllCards(struct Card* head){
+    struct Card* newCard = head;
+    for (int i = 0; i < 52; i++){
+        newCard->shown = true;
+        newCard = newCard->next;
+    }
 }
