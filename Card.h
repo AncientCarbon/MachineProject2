@@ -5,7 +5,7 @@
 #ifndef MACHINEPROJECT2_CARD_H
 #define MACHINEPROJECT2_CARD_H
 struct Card* generateDeck();
-void flipCard(struct Card*, bool);
+void flipCard(struct Card*);
 enum suit;
 
 struct Card{

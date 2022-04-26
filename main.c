@@ -51,32 +51,8 @@ int main() {
             }
         }
 
-        /*for (int i = 0; i < 51; i++){
-            newCard = (struct Card *) malloc(sizeof(struct Card));
-            newCard->previous = prevCard;
-            prevCard->next = newCard;
-            newCard->next = NULL;
-            newCard->shown = true;
-            fscanf(file, "%c%c", newCard->value, newCard->suit);
-            prevCard = newCard;
-        }*/
-
         printTable(head);
     }
-
-
-    /*struct Card* head = generateDeck();
-    //struct Card* sHead = shuffleDeck();
-
-    struct Card* newCard = head;
-
-    for (int i = 0; i < 52; i++){
-        flipCard(newCard, true);
-        newCard = newCard->next;
-    }
-
-    printTable(head);
-    */
 
     return 0;
 }
