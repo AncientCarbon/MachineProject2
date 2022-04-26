@@ -23,30 +23,34 @@ int main() {
     FILE * file;
     char line[2];
     if (cmd1 == 'L' && cmd2 == 'D'){
-        file = fopen("C:\\Users\\bruger\\CLionProjects\\MachineProject2\\UnshuffledDeck.txt", "rt");
+        file = fopen("UnshuffledDeck.txt", "rt");
         int cur_line = 1; //sat til 1 pga head der bliver lavet uden for loop
         if (file == NULL){
-            printf("File not found");
+            printf("File not found, loading default deck\n\n");
+            head = generateDeck();
         }
-        else printf("File found");
+        else {
 
-        head = (struct Card *) malloc(sizeof(struct Card));
-        head->shown = true;
-        head->next = NULL;
-        head->previous = NULL;
-        prevCard = head;
+            printf("File found");
+            head = (struct Card *) malloc(sizeof(struct Card));
+            head->shown = true;
+            head->next = NULL;
+            head->previous = NULL;
+            prevCard = head;
 
-        fscanf(file, "%c%c\n", head->value, head->suit);
+            fscanf(file, "%c%c\n", head->value, head->suit);
 
-        while (fgets(line, 3, file) != NULL){
-            newCard = (struct Card *) malloc(sizeof(struct Card));
-            newCard->previous = prevCard;
-            prevCard->next = newCard;
-            newCard->next = NULL;
-            newCard->shown = true;
-            sscanf(line, "%c%c\n", newCard->value, newCard->suit);
-            cur_line++;
+            while (fgets(line, 3, file) != NULL){
+                newCard = (struct Card *) malloc(sizeof(struct Card));
+                newCard->previous = prevCard;
+                prevCard->next = newCard;
+                newCard->next = NULL;
+                newCard->shown = true;
+                sscanf(line, "%c%c\n", newCard->value, newCard->suit);
+                cur_line++;
+            }
         }
+
         /*for (int i = 0; i < 51; i++){
             newCard = (struct Card *) malloc(sizeof(struct Card));
             newCard->previous = prevCard;
@@ -57,7 +61,6 @@ int main() {
             prevCard = newCard;
         }*/
 
-        newCard = head;
         printTable(head);
     }
 

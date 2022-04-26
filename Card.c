@@ -17,7 +17,7 @@ struct Card* generateDeck(){
     //------------------------------------------------------------------------------------------------------------------
 
     int index = 0;
-    int value = 1;
+    char value = 'A';
     char suit = 'C';
     int suitNr = 0;
 
@@ -25,7 +25,7 @@ struct Card* generateDeck(){
     head->index = index;
     head->suit = suit;
     head->value = value;
-    head->shown = 0;
+    head->shown = true;
     head->previous = NULL;
     head->next = NULL;
     prevCard = head;
@@ -34,9 +34,8 @@ struct Card* generateDeck(){
 
     for (int i = 0; i < 51; i++) {
         index++;
-        value++;
-        if (value > 13) {
-            value = 1;
+
+        if (index % 13 == 0) {
             suitNr++;
             switch (suitNr){
                 case(1): suit = 'D'; break;
@@ -45,15 +44,27 @@ struct Card* generateDeck(){
                 default: break;
             }
         }
+
         newCard = (struct Card *) malloc(sizeof(struct Card));
-        newCard->shown = false;
+        newCard->shown = true;
         newCard->index = index;
         newCard->previous = prevCard;
         newCard->next = NULL;
         prevCard->next = newCard;
         prevCard = newCard;
         newCard->suit = suit;
-        newCard->value = value;
+
+        // value switch
+        switch (index % 13){
+            case (0): newCard->value = 'A'; break;
+            case 1 ... 8: newCard->value = index%13 + 49; break; // ASCII værdier 50-57 giver digits 2-9.
+            case (9): newCard->value = 'T'; break;
+            case (10): newCard->value = 'J'; break;
+            case (11): newCard->value = 'Q'; break;
+            case (12): newCard->value = 'K'; break;
+            default: newCard->value = '0';
+        }
+
     }
     return head;
 }
