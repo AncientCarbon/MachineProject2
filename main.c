@@ -128,3 +128,7 @@ void showAllCards(struct Card* head){
         newCard = newCard->next;
     }
 }
+
+void setupGame(struct Card* head){
+
+}
