@@ -74,9 +74,10 @@ void flipCard(struct Card* newCard){
     else newCard->shown = true;
 }
 
-void loadFile(){
-
+void setCardShown(struct Card* newCard, bool shown){
+    newCard->shown = shown;
 }
+
 
 /*struct Card* shuffleDeck(){
     struct Card* newCard;

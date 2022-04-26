@@ -6,7 +6,7 @@
 #define MACHINEPROJECT2_CARD_H
 struct Card* generateDeck();
 void flipCard(struct Card*);
-enum suit;
+void setCardShown(struct Card*, bool);
 
 struct Card{
     int index;
