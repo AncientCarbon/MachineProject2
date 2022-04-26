@@ -4,7 +4,7 @@
 #include "Card.h"
 
 
-void printTable();
+void printTable(struct Card* head);
 //struct Card* shuffleDeck();
 int arrayGenerator();
 
@@ -21,21 +21,33 @@ int main() {
     scanf("%c%c", &cmd1, &cmd2);
 
     FILE * file;
+    char line[2];
     if (cmd1 == 'L' && cmd2 == 'D'){
         file = fopen("C:\\Users\\bruger\\CLionProjects\\MachineProject2\\UnshuffledDeck.txt", "rt");
-        rewind(file);
+        int cur_line = 1; //sat til 1 pga head der bliver lavet uden for loop
         if (file == NULL){
             printf("File not found");
         }
         else printf("File found");
 
         head = (struct Card *) malloc(sizeof(struct Card));
-        fscanf(file, "%c%c", head->value, head->suit);
         head->shown = true;
         head->next = NULL;
         head->previous = NULL;
         prevCard = head;
-        for (int i = 0; i < 51; i++){
+
+        fscanf(file, "%c%c\n", head->value, head->suit);
+
+        while (fgets(line, 3, file) != NULL){
+            newCard = (struct Card *) malloc(sizeof(struct Card));
+            newCard->previous = prevCard;
+            prevCard->next = newCard;
+            newCard->next = NULL;
+            newCard->shown = true;
+            sscanf(line, "%c%c\n", newCard->value, newCard->suit);
+            cur_line++;
+        }
+        /*for (int i = 0; i < 51; i++){
             newCard = (struct Card *) malloc(sizeof(struct Card));
             newCard->previous = prevCard;
             prevCard->next = newCard;
@@ -43,13 +55,10 @@ int main() {
             newCard->shown = true;
             fscanf(file, "%c%c", newCard->value, newCard->suit);
             prevCard = newCard;
-        }
+        }*/
 
         newCard = head;
-        for (int i = 0; i < 52; i++){
-            printf("%c%c", newCard->value, newCard->suit);
-            newCard = newCard->next;
-        }
+        printTable(head);
     }
 
 
@@ -96,57 +105,8 @@ void printTable(struct Card* head){
     for (int i = 0; i < 52; i++){
         rowNumber++;
         if (!newCard->shown) printf("[]\t");
-        else switch(newCard->value){
-            case(1): printf("A%c\t", newCard->suit); break;
-            case(10): printf("T%c\t", newCard->suit); break;
-            case(11): printf("J%c\t", newCard->suit); break;
-            case(12): printf("Q%c\t", newCard->suit); break;
-            case(13): printf("K%c\t", newCard->suit); break;
-            default: printf("%d%c\t", newCard->value, newCard->suit); break;
-        }
+        else printf("%c%c\t", newCard->value, newCard->suit);
 
-        /*else switch (newCard->suit){
-            case(1): {
-                switch (newCard->value){
-                    case(1): printf("AC\t"); break;
-                    case(11): printf("JC\t"); break;
-                    case(12): printf("QC\t"); break;
-                    case(13): printf("KC\t"); break;
-                    default: printf("%dC\t", newCard->value); break;
-                }
-                break;
-            }
-            case(2): {
-                switch (newCard->value){
-                    case(1): printf("AD\t"); break;
-                    case(11): printf("JD\t"); break;
-                    case(12): printf("QD\t"); break;
-                    case(13): printf("KD\t"); break;
-                    default: printf("%dD\t", newCard->value); break;
-                }
-                break;
-            }
-            case(3): {
-                switch (newCard->value){
-                    case(1): printf("AH\t"); break;
-                    case(11): printf("JH\t"); break;
-                    case(12): printf("QH\t"); break;
-                    case(13): printf("KH\t"); break;
-                    default: printf("%dH\t", newCard->value); break;
-                }
-                break;
-            }
-            case(4): {
-                switch (newCard->value){
-                    case(1): printf("AS\t"); break;
-                    case(11): printf("JS\t"); break;
-                    case(12): printf("QS\t"); break;
-                    case(13): printf("KS\t"); break;
-                    default: printf("%dS\t", newCard->value); break;
-                }
-                break;
-            }
-        }*/
         if (rowNumber == 7){
             lineNumber++;
             if (lineNumber % 2 == 1) printf("\t\t[]\tF%d", (lineNumber/2)+1);
