@@ -109,7 +109,7 @@ struct Card* shuffleDeck(){
     head->index = index;
     head->suit = getSuit(array[0]);
     head->value = getValue(array[0]);
-    head->shown = true;
+    head->shown = false;
     head->previous = NULL;
     head->next = NULL;
 
@@ -122,7 +122,7 @@ struct Card* shuffleDeck(){
         newCard->index = index;
         newCard->suit = getSuit(array[j]);
         newCard->value = getValue(array[j]);
-        newCard->shown = true;
+        newCard->shown = false;
         newCard->previous = prevCard;
         prevCard->next = newCard;
         newCard->next = NULL;

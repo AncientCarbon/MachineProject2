@@ -62,10 +62,8 @@ int main() {
         }
     }
 
-
+    struct Card* currentDeck = head;
     while (true){
-        struct Card* currentDeck = head;
-
         // dumpCmd is a bugfix. We don't know why, but the first char is a \n only half of the time.
         char dumpCmd;
         printf("Command: ");
