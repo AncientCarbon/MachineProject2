@@ -22,7 +22,6 @@ int main() {
 
     char cmd1;
     char cmd2;
-
     printf("Command: ");
     scanf("%c%c", &cmd1, &cmd2);
 
@@ -62,7 +61,10 @@ int main() {
         }
     }
 
+
     while (true){
+
+        // dumpCmd is a bugfix. We don't know why, but the first char is a \n only half of the time.
         char dumpCmd;
         printf("Command: ");
         scanf("%c%c%c", &cmd1, &cmd2, &dumpCmd);
@@ -70,29 +72,42 @@ int main() {
             cmd1 = cmd2;
             cmd2 = dumpCmd;
         }
+
+        // quit the program
         if (cmd1 == 'Q' && cmd2 == 'Q'){
             printf("Quitting program...\n");
             break;
         }
+
+        // print the whole deck with all cards face-up
         else if (cmd1 == 'S' && cmd2 == 'W'){
             showAllCards(head);
             PrintDeckAsTable(head);
             printf("");
         }
+
+        // shuffle all cards in interleaved manner
         else if (cmd1 == 'S' && cmd2 == 'I'){
             printf("Command not implemented\n");
         }
+
+        // Shuffle all cards in a random manner
         else if (cmd1 == 'S' && cmd2 == 'R'){
             printf("Command not implemented\n");
         }
+
+        // Save game to speficied file from parameter
         else if (cmd1 == 'S' && cmd2 == 'D'){
             printf("Command not implemented\n");
         }
+
+        // Play the game using current deck
         else if (cmd1 == 'P' && cmd2 == '\n'){
             printf("Setting up game...\n\n");
             setupGame(head);
-
         }
+
+        // Quit current game and go back to Startup phase
         else if (cmd1 == 'Q' && cmd2 == '\n'){
             printf("Command not implemented\n");
         }
