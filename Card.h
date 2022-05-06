@@ -7,6 +7,9 @@
 struct Card* generateDeck();
 void flipCard(struct Card*);
 void setCardShown(struct Card*, bool);
+char getValue(int);
+char getSuit(int);
+struct Card* shuffleDeck();
 
 struct Card{
     int index;

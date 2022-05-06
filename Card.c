@@ -62,7 +62,7 @@ struct Card* generateDeck(){
             case (10): newCard->value = 'J'; break;
             case (11): newCard->value = 'Q'; break;
             case (12): newCard->value = 'K'; break;
-            default: newCard->value = '0';
+            default: newCard->value = '0'; // 0 for at indikere at noget er galt
         }
 
     }
@@ -79,29 +79,17 @@ void setCardShown(struct Card* newCard, bool shown){
 }
 
 
-/*struct Card* shuffleDeck(){
+struct Card* shuffleDeck(){
     struct Card* newCard;
     struct Card* head;
     struct Card* prevCard;
 
-    int array[52];
-    for (int i = 0; i < 52; i++){
+    int n = 52;
+    int array[n];
+
+    for (int i = 0; i < n; i++){
         array[i] = i+1;
     }
-
-    int index = 0;
-    int value = array[0] % 14;
-
-
-    head = (struct Card*)malloc(sizeof(struct Card));
-    head->index = index;
-    head->suit = suit;
-    head->value = value;
-    head->shown = 0;
-    head->previous = NULL;
-    head->next = NULL;
-
-    int n = 52;
 
     //------------------------------------------------------------------------------------------------------------------
     // Source: https://benpfaff.org/writings/clc/shuffle.html
@@ -115,5 +103,59 @@ void setCardShown(struct Card* newCard, bool shown){
         array[i] = t;
     }
 
+    int index = 0;
+
+    head = (struct Card*)malloc(sizeof(struct Card));
+    head->index = index;
+    head->suit = getSuit(array[0]);
+    head->value = getValue(array[0]);
+    head->shown = false;
+    head->previous = NULL;
+    head->next = NULL;
+
+    prevCard = head;
+
+    for(int j = 0; j < n-1; j++){
+        index++;
+
+        newCard = (struct Card*)malloc(sizeof(struct Card));
+        newCard->index = index;
+        newCard->suit = getSuit(array[j+1]);
+        newCard->value = getValue(array[j+1]);
+        newCard->shown = false;
+        newCard->previous = prevCard;
+        prevCard->next = newCard;
+        newCard->next = NULL;
+
+        prevCard = newCard;
+
+    }
+
     return head;
-}*/
+}
+
+char getValue(int in){
+    char value;
+    switch(in % 13){
+        case(0): value = 'A'; break;
+        case 1 ... 8: value = in%13 + 49; break;
+        case(9): value = 'T'; break;
+        case(10): value = 'J'; break;
+        case(11): value = 'Q'; break;
+        case(12): value = 'K'; break;
+        default: value = '0';
+    }
+    return value;
+}
+
+char getSuit(int in){
+    char suit;
+    switch(in % 4){
+        case(0): suit = 'C'; break;
+        case(1): suit = 'D'; break;
+        case(2): suit = 'H'; break;
+        case(3): suit = 'S'; break;
+        default: suit = '0'; // error
+    }
+    return suit;
+}

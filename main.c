@@ -11,6 +11,7 @@ void printCard(struct Card* card);
 void printTable(struct Card* head1, struct Card* head2, struct Card* head3, struct Card* head4, struct Card* head5,
                 struct Card* head6, struct Card* head7);
 
+
 //struct Card* shuffleDeck();
 int arrayGenerator();
 
@@ -63,7 +64,7 @@ int main() {
 
 
     while (true){
-
+        struct Card* currentDeckHead = head;
         // dumpCmd is a bugfix. We don't know why, but the first char is a \n only half of the time.
         char dumpCmd;
         printf("Command: ");
@@ -81,9 +82,9 @@ int main() {
 
         // print the whole deck with all cards face-up
         else if (cmd1 == 'S' && cmd2 == 'W'){
-            showAllCards(head);
-            PrintDeckAsTable(head);
-            printf("");
+            showAllCards(currentDeckHead);
+            PrintDeckAsTable(currentDeckHead);
+
         }
 
         // shuffle all cards in interleaved manner
@@ -93,7 +94,8 @@ int main() {
 
         // Shuffle all cards in a random manner
         else if (cmd1 == 'S' && cmd2 == 'R'){
-            printf("Command not implemented\n");
+            currentDeckHead = shuffleDeck();
+            PrintDeckAsTable(currentDeckHead);
         }
 
         // Save game to speficied file from parameter
@@ -128,8 +130,8 @@ void PrintDeckAsTable(struct Card* head){
     int lineNumber = 0;
     for (int i = 0; i < 52; i++){
         rowNumber++;
-        if (!newCard->shown) printf("[]\t");
-        else printCard(newCard);
+
+        printCard(newCard);
 
         if (rowNumber == 7){
             lineNumber++;
