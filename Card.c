@@ -109,20 +109,20 @@ struct Card* shuffleDeck(){
     head->index = index;
     head->suit = getSuit(array[0]);
     head->value = getValue(array[0]);
-    head->shown = false;
+    head->shown = true;
     head->previous = NULL;
     head->next = NULL;
 
     prevCard = head;
 
-    for(int j = 0; j < n-1; j++){
+    for(int j = 1; j < n; j++){
         index++;
 
         newCard = (struct Card*)malloc(sizeof(struct Card));
         newCard->index = index;
-        newCard->suit = getSuit(array[j+1]);
-        newCard->value = getValue(array[j+1]);
-        newCard->shown = false;
+        newCard->suit = getSuit(array[j]);
+        newCard->value = getValue(array[j]);
+        newCard->shown = true;
         newCard->previous = prevCard;
         prevCard->next = newCard;
         newCard->next = NULL;

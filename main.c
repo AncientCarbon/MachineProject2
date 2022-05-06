@@ -64,7 +64,8 @@ int main() {
 
 
     while (true){
-        struct Card* currentDeckHead = head;
+        struct Card* currentDeck = head;
+
         // dumpCmd is a bugfix. We don't know why, but the first char is a \n only half of the time.
         char dumpCmd;
         printf("Command: ");
@@ -82,8 +83,8 @@ int main() {
 
         // print the whole deck with all cards face-up
         else if (cmd1 == 'S' && cmd2 == 'W'){
-            showAllCards(currentDeckHead);
-            PrintDeckAsTable(currentDeckHead);
+            showAllCards(currentDeck);
+            PrintDeckAsTable(currentDeck);
 
         }
 
@@ -94,8 +95,8 @@ int main() {
 
         // Shuffle all cards in a random manner
         else if (cmd1 == 'S' && cmd2 == 'R'){
-            currentDeckHead = shuffleDeck();
-            PrintDeckAsTable(currentDeckHead);
+            currentDeck = shuffleDeck();
+            PrintDeckAsTable(currentDeck);
         }
 
         // Save game to speficied file from parameter
@@ -106,7 +107,7 @@ int main() {
         // Play the game using current deck
         else if (cmd1 == 'P' && cmd2 == '\n'){
             printf("Setting up game...\n\n");
-            setupGame(head);
+            setupGame(currentDeck);
         }
 
         // Quit current game and go back to Startup phase
