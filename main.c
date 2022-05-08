@@ -7,11 +7,12 @@
 
 void PrintDeckAsTable(struct Card* head);
 void showAllCards(struct Card* head);
-void setupGame(struct Card* head);
+struct CardArray* setupGame(struct Card* head);
 void printCard(struct Card* card);
 void printTable(struct Card* head1, struct Card* head2, struct Card* head3, struct Card* head4, struct Card* head5,
                 struct Card* head6, struct Card* head7);
 void saveDeck(struct Card* head);
+void moveCards(struct Card* fromColumn, char cardName[3], struct Card* toColumn);
 
 
 //struct Card* shuffleDeck();
@@ -111,7 +112,7 @@ int main() {
         // Play the game using current deck
         else if (cmd1 == 'P' && cmd2 == '\n'){
             printf("Setting up game...\n\n");
-            setupGame(currentDeck);
+            struct Card* cardArr = setupGame(currentDeck);
             started = true;
         }
         else printf("Command not recognized\n");
@@ -166,7 +167,31 @@ int main() {
                 started = false;
             }
             else {
+                if (input[0] == 'C'){
+                    switch (input[1]){
+                        case ('1'): {
 
+                        }
+                        case ('2'): {
+
+                        }
+                        case ('3'): {
+
+                        }
+                        case ('4'): {
+
+                        }
+                        case ('5'): {
+
+                        }
+                        case ('6'): {
+
+                        }
+                        case ('7'): {
+
+                        }
+                    }
+                }
             }
         }
 
@@ -209,7 +234,7 @@ void showAllCards(struct Card* head){
     }
 }
 
-void setupGame(struct Card* origHead){
+struct CardArray* setupGame(struct Card* origHead){
     struct Card* origNewCard = origHead;
 
     struct Card* row1head = origNewCard;
@@ -355,7 +380,16 @@ void setupGame(struct Card* origHead){
 
     }
     printTable(row1head, row2head, row3head, row4head, row5head, row6head, row7head);
+    struct Card* arr[7];
+    arr[0] = row1head;
+    arr[1] = row2head;
+    arr[2] = row3head;
+    arr[3] = row4head;
+    arr[4] = row5head;
+    arr[5] = row6head;
+    arr[6] = row7head;
 
+    return arr;
 }
 
 void printTable(struct Card* head1, struct Card* head2, struct Card* head3, struct Card* head4, struct Card* head5,
@@ -437,4 +471,26 @@ void saveDeck(struct Card* head){
     }
 
     fclose(file);
+}
+
+void moveCards(struct Card* fromColumn, char cardName[], struct Card* toColumn){
+    struct Card* fromColumnNewCard = fromColumn;
+    struct Card* toColumnNewCard = toColumn;
+
+    while (cardName[0] != fromColumnNewCard->value || cardName[1] != fromColumnNewCard->suit) {
+
+        fromColumnNewCard = fromColumnNewCard->next;
+        if (fromColumnNewCard == NULL){
+            printf("Error\n");
+            return;
+        }
+    }
+
+    while (toColumnNewCard->next != NULL){
+        toColumnNewCard = toColumnNewCard->next;
+    }
+
+    toColumnNewCard->next = fromColumnNewCard;
+    fromColumnNewCard->previous = toColumnNewCard;
+
 }
