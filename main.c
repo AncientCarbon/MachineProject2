@@ -114,6 +114,8 @@ int main() {
             setupGame(currentDeck);
             started = true;
         }
+        else printf("Command not recognized\n");
+
         while (started){
             /*
              * TODO: GAME MOVES
@@ -168,7 +170,6 @@ int main() {
             }
         }
 
-        else printf("Command not recognized\n");
     }
 
     return 0;
