@@ -4,6 +4,7 @@
 
 #include "Card.h"
 #include <stdlib.h>
+#include <time.h>
 
 struct Card* generateDeck(){
     struct Card* newCard;
@@ -86,7 +87,7 @@ struct Card* shuffleDeck(){
 
     int n = 52;
     int array[n];
-
+    srand(time(NULL));
     for (int i = 0; i < n; i++){
         array[i] = i+1;
     }
