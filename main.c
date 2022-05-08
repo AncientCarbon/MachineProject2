@@ -19,6 +19,8 @@ int arrayGenerator();
 
 
 int main() {
+    srand(time(NULL));// seeder vores pseudo number generator
+    rand();
     struct Card* head;
     struct Card* newCard;
     struct Card* prevCard;

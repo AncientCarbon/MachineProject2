@@ -5,6 +5,7 @@
 #include "Card.h"
 #include <stdlib.h>
 #include <time.h>
+#include <stdio.h>
 
 struct Card* generateDeck(){
     struct Card* newCard;
@@ -87,7 +88,7 @@ struct Card* shuffleDeck(){
 
     int n = 52;
     int array[n];
-    srand(time(NULL));
+
     for (int i = 0; i < n; i++){
         array[i] = i+1;
     }
@@ -98,7 +99,10 @@ struct Card* shuffleDeck(){
     //------------------------------------------------------------------------------------------------------------------
     size_t i;
     for (i = 0; i < n-1; i++){
-        size_t j = i + rand() / (RAND_MAX / (n - i) + 1);
+        int maxRand = RAND_MAX / (n-i) + 1;
+        size_t j = i + rand() / maxRand;
+        // printf("%d\n", maxRand);
+        // printf("%d, ", i + rand());
         int t = array[j];
         array[j] = array[i];
         array[i] = t;
