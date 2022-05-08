@@ -33,6 +33,7 @@ int main() {
     FILE * file;
     char line[5];
     if (cmd1 == 'L' && cmd2 == 'D'){
+
         file = fopen("..\\UnshuffledDeck.txt", "rt"); // TODO: Prompt der spørger om filnavn
         if (file == NULL){
             printf("File not found, loading default deck\n\n");
@@ -67,6 +68,7 @@ int main() {
     }
 
     struct Card* currentDeck = head;
+    bool started = false;
     while (true){
         // dumpCmd is a bugfix. We don't know why, but the first char is a \n only half of the time.
         char dumpCmd;
@@ -87,7 +89,6 @@ int main() {
         else if (cmd1 == 'S' && cmd2 == 'W'){
             showAllCards(currentDeck);
             PrintDeckAsTable(currentDeck);
-
         }
 
         // shuffle all cards in interleaved manner
@@ -111,12 +112,62 @@ int main() {
         else if (cmd1 == 'P' && cmd2 == '\n'){
             printf("Setting up game...\n\n");
             setupGame(currentDeck);
+            started = true;
+        }
+        while (started){
+            /*
+             * TODO: GAME MOVES
+             * format: <from> -> <to>
+             * From example: If we have 4 of hearts in C6, and we want to move this card, we type:
+             * C6:4H
+             *
+             * If we only type column, it will select the bottom card. Example: C6
+             *
+             * If we need to move something from foundation, we can only move the top card, so we type:
+             * F1, F2, F3 or F4
+             *
+             * To example: If we want to move to a column, we type column name. Example:
+             * C2
+             *
+             * If we want to move to foundation, we type the foundation name. Example:
+             * F2
+             *
+             * A command will therefore have the input:
+             * C7->F4
+             * to move the bottom card of C7 to foundation F4
+             *
+             * If we want to move more cards, we can type:
+             * C7:4C->C4
+             * to move 4 of clubs and everything below to column C4
+             *
+             * ---------------------------------------------------------------------------------------------------------
+             * TODO IMPORTANT: VALIDITY CHECK
+             * ---------------------------------------------------------------------------------------------------------
+             * If the move is illegal, a message should be printed: ERROR
+             * If the move is valid, a message should be printed: OK
+             *
+             */
+
+            char input[20];
+            printf("Input: ");
+            scanf("%s", input);
+            printf("\n");
+            if (input[0] == '\n'){
+                int i = 1;
+                while (input[i] != '\0') {
+                    input[i-1] = input[i];
+                    i++;
+                }
+            }
+            if (input[0] == 'Q' && input[1] == '\n'){
+                printf("Returning to startup phase...\n");
+                started = false;
+            }
+            else {
+
+            }
         }
 
-        // Quit current game and go back to Startup phase
-        else if (cmd1 == 'Q' && cmd2 == '\n'){
-            printf("Command not implemented\n");
-        }
         else printf("Command not recognized\n");
     }
 
