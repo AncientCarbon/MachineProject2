@@ -159,6 +159,7 @@ void setupGame(struct Card* origHead){
     origNewCard = origNewCard->next;
     row1head->next = NULL;
     row1head->previous = NULL;
+    row1head->shown = true;
     struct Card* row1newCard;
     struct Card* row1prevCard = row1head;
 
@@ -168,6 +169,7 @@ void setupGame(struct Card* origHead){
     origNewCard = origNewCard->next;
     row2head->next = NULL;
     row2head->previous = NULL;
+    row2head->shown = false;
     struct Card* row2newCard;
     struct Card* row2prevCard = row2head;
 
@@ -176,6 +178,7 @@ void setupGame(struct Card* origHead){
     origNewCard = origNewCard->next;
     row3head->next = NULL;
     row3head->previous = NULL;
+    row3head->shown = false;
     struct Card* row3newCard;
     struct Card* row3prevCard = row3head;
 
@@ -183,6 +186,7 @@ void setupGame(struct Card* origHead){
     origNewCard = origNewCard->next;
     row4head->next = NULL;
     row4head->previous = NULL;
+    row4head->shown = false;
     struct Card* row4newCard;
     struct Card* row4prevCard = row4head;
 
@@ -190,6 +194,7 @@ void setupGame(struct Card* origHead){
     origNewCard = origNewCard->next;
     row5head->next = NULL;
     row5head->previous = NULL;
+    row5head->shown = false;
     struct Card* row5newCard;
     struct Card* row5prevCard = row5head;
 
@@ -197,6 +202,7 @@ void setupGame(struct Card* origHead){
     origNewCard = origNewCard->next;
     row6head->next = NULL;
     row6head->previous = NULL;
+    row6head->shown = false;
     struct Card* row6newCard;
     struct Card* row6prevCard = row6head;
 
@@ -204,6 +210,7 @@ void setupGame(struct Card* origHead){
     origNewCard = origNewCard->next;
     row7head->next = NULL;
     row7head->previous = NULL;
+    row7head->shown = false;
     struct Card* row7newCard;
     struct Card* row7prevCard = row7head;
 
@@ -213,53 +220,67 @@ void setupGame(struct Card* origHead){
     int row4counter = 0;
     int row5counter = 0;
     int row6counter = 0;
+    int row7counter = 0;
     for (int i = 0; i < 45; i++) {
-        if (row2counter <6) {
+        if (row2counter <5) {
             row2newCard = origNewCard;
             origNewCard = origNewCard->next;
             row2newCard->previous = row2prevCard;
             row2prevCard->next = row2newCard;
             row2newCard->next = NULL;
+            row2newCard->shown = true;
             row2prevCard = row2newCard;
             row2counter++;
             i++;
         }
-        if (row3counter < 7) {
+        if (row3counter < 6) {
             row3newCard = origNewCard;
             origNewCard = origNewCard->next;
             row3newCard->previous = row3prevCard;
             row3prevCard->next = row3newCard;
             row3newCard->next = NULL;
+            if (row3counter < 1){
+                row3newCard->shown = false;
+            } else row3newCard->shown = true;
             row3prevCard = row3newCard;
             row3counter++;
             i++;
         }
-        if (row4counter < 8) {
+        if (row4counter < 7) {
             row4newCard = origNewCard;
             origNewCard = origNewCard->next;
             row4newCard->previous = row4prevCard;
             row4prevCard->next = row4newCard;
             row4newCard->next = NULL;
+            if (row4counter < 2){
+                row4newCard->shown = false;
+            } else row4newCard->shown = true;
             row4prevCard = row4newCard;
             row4counter++;
             i++;
         }
-        if (row5counter < 9) {
+        if (row5counter < 8) {
             row5newCard = origNewCard;
             origNewCard = origNewCard->next;
             row5newCard->previous = row5prevCard;
             row5prevCard->next = row5newCard;
             row5newCard->next = NULL;
+            if (row5counter < 3){
+                row5newCard->shown = false;
+            } else row5newCard->shown = true;
             row5prevCard = row5newCard;
             row5counter++;
             i++;
         }
-        if (row6counter < 10) {
+        if (row6counter < 9) {
             row6newCard = origNewCard;
             origNewCard = origNewCard->next;
             row6newCard->previous = row6prevCard;
             row6prevCard->next = row6newCard;
             row6newCard->next = NULL;
+            if (row6counter < 4){
+                row6newCard->shown = false;
+            } else row6newCard->shown = true;
             row6prevCard = row6newCard;
             row6counter++;
             i++;
@@ -269,6 +290,10 @@ void setupGame(struct Card* origHead){
         row7newCard->previous = row7prevCard;
         row7prevCard->next = row7newCard;
         row7newCard->next = NULL;
+        if (row7counter < 5){
+            row7newCard->shown = false;
+        } else row7newCard->shown = true;
+        row7counter++;
         row7prevCard = row7newCard;
 
     }
@@ -289,42 +314,43 @@ void printTable(struct Card* head1, struct Card* head2, struct Card* head3, stru
     printf("C1\tC2\tC3\tC4\tC5\tC6\tC7\n\n");
 
     int lineCounter = 1;
-    for (int i = 0; i < 52; i++){
-        if (row1 != NULL){
-            printCard(row1);
-            row1 = row1->next;
-            i++;
-        } else printf("\t");
+
+    while (row1 != NULL || row2 != NULL || row3 != NULL || row4 != NULL || row5 != NULL || row6 != NULL || row7 != NULL){
+       if (row1 != NULL){
+           printCard(row1);
+           row1 = row1->next;
+       } else printf("\t");
+
         if (row2 != NULL){
             printCard(row2);
             row2 = row2->next;
-            i++;
         } else printf("\t");
+
         if (row3 != NULL){
             printCard(row3);
             row3 = row3->next;
-            i++;
         } else printf("\t");
+
         if (row4 != NULL){
             printCard(row4);
             row4 = row4->next;
-            i++;
         } else printf("\t");
+
         if (row5 != NULL){
             printCard(row5);
             row5 = row5->next;
-            i++;
         } else printf("\t");
+
         if (row6 != NULL) {
             printCard(row6);
             row6 = row6->next;
-            i++;
         } else printf("\t");
+
         if (row7 != NULL) {
             printCard(row7);
             row7 = row7->next;
-            i++;
         } else printf("\t");
+
         if (lineCounter % 2 == 1 && (lineCounter/2) < 4) printf("\t\t[] F%d", (lineCounter/2)+1);
         printf("\n");
         lineCounter++;
