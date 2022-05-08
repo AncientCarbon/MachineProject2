@@ -96,19 +96,22 @@ struct Card* shuffleDeck(){
     //------------------------------------------------------------------------------------------------------------------
     // Source: https://benpfaff.org/writings/clc/shuffle.html
     // Shuffles an array from 1-52
+    //
+    // Bytter positioner i arrayet i tilfældig rækkefølge
     //------------------------------------------------------------------------------------------------------------------
     size_t i;
     for (i = 0; i < n-1; i++){
         int maxRand = RAND_MAX / (n-i) + 1;
         size_t j = i + rand() / maxRand;
-        // printf("%d\n", maxRand);
-        // printf("%d, ", i + rand());
+
         int t = array[j];
         array[j] = array[i];
         array[i] = t;
     }
 
     int index = 0;
+
+    // genererer et helt nyt deck i stedet for at shuffle en linked liste.
 
     head = (struct Card*)malloc(sizeof(struct Card));
     head->index = index;
@@ -143,12 +146,12 @@ char getValue(int in){
     char value;
     switch(in % 13){
         case(0): value = 'A'; break;
-        case 1 ... 8: value = in%13 + 49; break;
+        case 1 ... 8: value = in%13 + 49; break; // ASCII værdier for 2-8
         case(9): value = 'T'; break;
         case(10): value = 'J'; break;
         case(11): value = 'Q'; break;
         case(12): value = 'K'; break;
-        default: value = '0';
+        default: value = '0'; // error
     }
     return value;
 }

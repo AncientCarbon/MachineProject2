@@ -20,7 +20,7 @@ int arrayGenerator();
 
 int main() {
     srand(time(NULL));// seeder vores pseudo number generator
-    rand();
+    rand(); // kalder rand for at fixe et problem med første kort der var det samme i nogle minutter.
     struct Card* head;
     struct Card* newCard;
     struct Card* prevCard;
@@ -33,14 +33,14 @@ int main() {
     FILE * file;
     char line[5];
     if (cmd1 == 'L' && cmd2 == 'D'){
-        file = fopen("..\\UnshuffledDeck.txt", "rt");
+        file = fopen("..\\UnshuffledDeck.txt", "rt"); // TODO: Prompt der spørger om filnavn
         if (file == NULL){
             printf("File not found, loading default deck\n\n");
             head = generateDeck();
         }
-        else {
+        else { // load decket fra en .txt fil
 
-            printf("File found\n\n");
+            printf("File found, loading deck...\n\n");
             head = (struct Card *) malloc(sizeof(struct Card));
             head->shown = false;
             head->next = NULL;
