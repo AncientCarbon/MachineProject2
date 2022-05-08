@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <string.h>
 #include "Card.h"
 
 
@@ -10,6 +11,7 @@ void setupGame(struct Card* head);
 void printCard(struct Card* card);
 void printTable(struct Card* head1, struct Card* head2, struct Card* head3, struct Card* head4, struct Card* head5,
                 struct Card* head6, struct Card* head7);
+void saveDeck(struct Card* head);
 
 
 //struct Card* shuffleDeck();
@@ -99,7 +101,8 @@ int main() {
 
         // Save game to speficied file from parameter
         else if (cmd1 == 'S' && cmd2 == 'D'){
-            printf("Command not implemented\n");
+            saveDeck(head);
+            //printf("Command not implemented\n");
         }
 
         // Play the game using current deck
@@ -362,4 +365,22 @@ void printCard(struct Card* card){
         printf("[]\t");
     }
     else printf("%c%c\t", card->value, card->suit);
+}
+
+void saveDeck(struct Card* head){
+    char deck[4*52];
+    FILE* file;
+    file = fopen("..\\Cards.txt", "w");
+    if (file == NULL){
+        printf("Error opening file.\n");
+    }
+
+    for (int i = 0; i < 52; i++){
+        //deck[i]=head;
+        printf("%c%c\n", head->value, head->suit);
+        fprintf(file,"%c%c\n", head->value, head->suit);
+        head = head->next;
+    }
+
+    fclose(file);
 }
