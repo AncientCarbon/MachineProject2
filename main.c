@@ -164,6 +164,7 @@ int main() {
             }
             if (input[0] == 'Q'){
                 printf("Returning to startup phase...\n");
+                currentDeck = shuffleDeck();
                 started = false;
             }
             else {
