@@ -98,8 +98,9 @@ int main() {
 
         // Shuffle all cards in a random manner
         else if (cmd1 == 'S' && cmd2 == 'R'){
+            printf("Shuffling deck...\n");
             currentDeck = shuffleDeck();
-            PrintDeckAsTable(currentDeck);
+            printf("Done.\n");
         }
 
         // Save game to speficied file from parameter
