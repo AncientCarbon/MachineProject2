@@ -12,8 +12,8 @@ void printCard(struct Card* card);
 void printTable(struct Card* head1, struct Card* head2, struct Card* head3, struct Card* head4, struct Card* head5,
                 struct Card* head6, struct Card* head7, struct Card* f11head, struct Card* f22head, struct Card* f33head, struct Card* f44head);
 void saveDeck(struct Card* head);
-void moveCards(struct Card* fromColumn, char cardName[3], struct Card* toColumn);
-
+void moveCards(struct Card* fromColumn, char cardValue, char cardSuit, struct Card* toColumn);
+struct Card* getColumnAsHead(char in, struct CardArray* cardArray);
 
 //struct Card* shuffleDeck();
 int arrayGenerator();
@@ -168,36 +168,47 @@ int main() {
             }
             else {
                 if (input[0] == 'C'){
-                    char cardName ={input[4], input[5]};
-
                     switch (input[1]){
                         case ('1'): {
-
-                               moveCards(cardArr->head1, cardName, )
+                            moveCards(cardArr->head1, input[4], input[5],
+                                      getColumnAsHead(input[8], cardArr));
+                            break;
                         }
                         case ('2'): {
-
+                            moveCards(cardArr->head2, input[4], input[5],
+                                      getColumnAsHead(input[8], cardArr));
+                            break;
                         }
                         case ('3'): {
-
+                            moveCards(cardArr->head3, input[4], input[5],
+                                      getColumnAsHead(input[8], cardArr));
+                            break;
                         }
                         case ('4'): {
-
+                            moveCards(cardArr->head4, input[4], input[5],
+                                      getColumnAsHead(input[8], cardArr));
+                            break;
                         }
                         case ('5'): {
-
+                            moveCards(cardArr->head5, input[4], input[5],
+                                      getColumnAsHead(input[8], cardArr));
+                            break;
                         }
                         case ('6'): {
-
+                            moveCards(cardArr->head6, input[4], input[5],
+                                      getColumnAsHead(input[8], cardArr));
+                            break;
                         }
                         case ('7'): {
+                            moveCards(cardArr->head7, input[4], input[5],
+                                      getColumnAsHead(input[8], cardArr));
+                            break;
 
                         }
                     }
                 }
             }
         }
-
     }
 
     return 0;
@@ -422,7 +433,7 @@ struct CardArray* setupGame(struct Card* origHead){
 
     }
     printTable(row1head, row2head, row3head, row4head, row5head, row6head, row7head, F1head, F2head, F3head, F4head);
-    struct CardArray* arr;
+    struct CardArray *arr;
     arr->head1 = row1head;
     arr->head2 = row2head;
     arr->head3 = row3head;
@@ -520,11 +531,11 @@ void saveDeck(struct Card* head){
     fclose(file);
 }
 
-void moveCards(struct Card* fromColumn, char cardName[], struct Card* toColumn){
+void moveCards(struct Card* fromColumn, char cardValue, char cardSuit, struct Card* toColumn){
     struct Card* fromColumnNewCard = fromColumn;
     struct Card* toColumnNewCard = toColumn;
 
-    while (cardName[0] != fromColumnNewCard->value || cardName[1] != fromColumnNewCard->suit) {
+    while (cardValue != fromColumnNewCard->value || cardSuit != fromColumnNewCard->suit) {
 
         fromColumnNewCard = fromColumnNewCard->next;
         if (fromColumnNewCard == NULL){
@@ -536,18 +547,23 @@ void moveCards(struct Card* fromColumn, char cardName[], struct Card* toColumn){
     while (toColumnNewCard->next != NULL){
         toColumnNewCard = toColumnNewCard->next;
     }
-
+    fromColumnNewCard->previous->next = NULL;
     toColumnNewCard->next = fromColumnNewCard;
     fromColumnNewCard->previous = toColumnNewCard;
+
 
 }
 
 struct Card* getColumnAsHead(char in, struct CardArray* cardArray){
-    switch (in){
+    int rowNr = (int) in;
+    switch (rowNr){
         case(1): return cardArray->head1;
         case(2): return cardArray->head2;
         case(3): return cardArray->head3;
         case(4): return cardArray->head4;
+        case(5): return cardArray->head5;
+        case(6): return cardArray->head6;
+        case(7): return cardArray->head7;
     }
     return 0;
 }
