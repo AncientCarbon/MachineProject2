@@ -10,7 +10,7 @@ void showAllCards(struct Card* head);
 struct CardArray* setupGame(struct Card* head);
 void printCard(struct Card* card);
 void printTable(struct Card* head1, struct Card* head2, struct Card* head3, struct Card* head4, struct Card* head5,
-                struct Card* head6, struct Card* head7, struct Card* f11head, struct Card* f22head, struct Card* f33head, struct Card* f44head);
+                struct Card* head6, struct Card* head7);
 void saveDeck(struct Card* head);
 void moveCards(struct Card* fromColumn, char cardValue, char cardSuit, struct Card* toColumn);
 struct Card* getColumnAsHead(char in, struct CardArray* cardArray);
@@ -162,7 +162,7 @@ int main() {
                     i++;
                 }
             }
-            if (input[0] == 'Q' && input[1] == '\n'){
+            if (input[0] == 'Q'){
                 printf("Returning to startup phase...\n");
                 started = false;
             }
@@ -311,7 +311,7 @@ struct CardArray* setupGame(struct Card* origHead){
     struct Card* row7prevCard = row7head;
 
     //Creating F1-F4 lists
-    struct Card* F1head = origNewCard;
+    /* struct Card* F1head = origNewCard;
     origNewCard = origNewCard->next;
 
     F1head->next = NULL;
@@ -345,7 +345,7 @@ struct CardArray* setupGame(struct Card* origHead){
     F4head->previous = NULL;
     F4head->shown = false;
     struct Card* F4newCard;
-    struct Card* F4prevCard = F4head;
+    struct Card* F4prevCard = F4head; */
 
 
 
@@ -432,8 +432,9 @@ struct CardArray* setupGame(struct Card* origHead){
         row7prevCard = row7newCard;
 
     }
-    printTable(row1head, row2head, row3head, row4head, row5head, row6head, row7head, F1head, F2head, F3head, F4head);
-    struct CardArray *arr;
+    printTable(row1head, row2head, row3head, row4head, row5head, row6head, row7head);
+    struct CardArray* arr;
+    arr = (struct CardArray*)malloc(sizeof(struct CardArray));
     arr->head1 = row1head;
     arr->head2 = row2head;
     arr->head3 = row3head;
@@ -441,17 +442,17 @@ struct CardArray* setupGame(struct Card* origHead){
     arr->head5 = row5head;
     arr->head6 = row6head;
     arr->head7 = row7head;
-    arr->f11head = F1head;
+    /*arr->f11head = F1head;
     arr->f22head = F2head;
     arr->f33head = F3head;
-    arr->f44head = F4head;
+    arr->f44head = F4head;*/
 
 
     return arr;
 }
 
 void printTable(struct Card* head1, struct Card* head2, struct Card* head3, struct Card* head4, struct Card* head5,
-        struct Card* head6, struct Card* head7, struct Card* f11head, struct Card* f22head, struct Card* f33head, struct Card* f44head){
+        struct Card* head6, struct Card* head7){
     struct Card* row1 = head1;
     struct Card* row2 = head2;
     struct Card* row3 = head3;
@@ -555,7 +556,10 @@ void moveCards(struct Card* fromColumn, char cardValue, char cardSuit, struct Ca
 }
 
 struct Card* getColumnAsHead(char in, struct CardArray* cardArray){
+
+    // ASCII values 49-55 er 1-7
     int rowNr = (int) in;
+    rowNr = rowNr-48; // trækker ascii værdi fra
     switch (rowNr){
         case(1): return cardArray->head1;
         case(2): return cardArray->head2;
@@ -564,6 +568,6 @@ struct Card* getColumnAsHead(char in, struct CardArray* cardArray){
         case(5): return cardArray->head5;
         case(6): return cardArray->head6;
         case(7): return cardArray->head7;
+        default: printf("Error\n"); return 0;
     }
-    return 0;
 }
