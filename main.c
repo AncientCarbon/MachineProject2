@@ -70,6 +70,7 @@ int main() {
 
     struct Card* currentDeck = head;
     bool started = false;
+    struct CardArray* cardArr;
     while (true){
         // dumpCmd is a bugfix. We don't know why, but the first char is a \n only half of the time.
         char dumpCmd;
@@ -112,7 +113,7 @@ int main() {
         // Play the game using current deck
         else if (cmd1 == 'P' && cmd2 == '\n'){
             printf("Setting up game...\n\n");
-            struct Card* cardArr = setupGame(currentDeck);
+            cardArr = setupGame(currentDeck);
             started = true;
         }
         else printf("Command not recognized\n");
@@ -168,9 +169,11 @@ int main() {
             }
             else {
                 if (input[0] == 'C'){
+                    char cardName ={input[4], input[5]};
+
                     switch (input[1]){
                         case ('1'): {
-
+                            moveCards(cardArr->head1, cardName, )
                         }
                         case ('2'): {
 
@@ -244,7 +247,6 @@ struct CardArray* setupGame(struct Card* origHead){
     row1head->shown = true;
     struct Card* row1newCard;
     struct Card* row1prevCard = row1head;
-
 
 
     struct Card* row2head = origNewCard;
@@ -380,14 +382,14 @@ struct CardArray* setupGame(struct Card* origHead){
 
     }
     printTable(row1head, row2head, row3head, row4head, row5head, row6head, row7head);
-    struct Card* arr[7];
-    arr[0] = row1head;
-    arr[1] = row2head;
-    arr[2] = row3head;
-    arr[3] = row4head;
-    arr[4] = row5head;
-    arr[5] = row6head;
-    arr[6] = row7head;
+    struct CardArray* arr;
+    arr->head1 = row1head;
+    arr->head2 = row2head;
+    arr->head3 = row3head;
+    arr->head4 = row4head;
+    arr->head5 = row5head;
+    arr->head6 = row6head;
+    arr->head7 = row7head;
 
     return arr;
 }
@@ -493,4 +495,14 @@ void moveCards(struct Card* fromColumn, char cardName[], struct Card* toColumn){
     toColumnNewCard->next = fromColumnNewCard;
     fromColumnNewCard->previous = toColumnNewCard;
 
+}
+
+struct Card* getColumnAsHead(char in, struct CardArray* cardArray){
+    switch (in){
+        case(1): return cardArray->head1;
+        case(2): return cardArray->head2;
+        case(3): return cardArray->head3;
+        case(4): return cardArray->head4;
+    }
+    return 0;
 }
