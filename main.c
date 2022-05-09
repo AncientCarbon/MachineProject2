@@ -10,14 +10,13 @@ void showAllCards(struct Card* head);
 struct CardArray* setupGame(struct Card* head);
 void printCard(struct Card* card);
 void printTable(struct Card* head1, struct Card* head2, struct Card* head3, struct Card* head4, struct Card* head5,
-                struct Card* head6, struct Card* head7);
+                struct Card* head6, struct Card* head7, struct Card* f11head, struct Card* f22head, struct Card* f33head, struct Card* f44head);
 void saveDeck(struct Card* head);
 void moveCards(struct Card* fromColumn, char cardName[3], struct Card* toColumn);
 
 
 //struct Card* shuffleDeck();
 int arrayGenerator();
-
 
 int main() {
     srand(time(NULL));// seeder vores pseudo number generator
@@ -173,7 +172,8 @@ int main() {
 
                     switch (input[1]){
                         case ('1'): {
-                            moveCards(cardArr->head1, cardName, )
+
+                               moveCards(cardArr->head1, cardName, )
                         }
                         case ('2'): {
 
@@ -202,6 +202,7 @@ int main() {
 
     return 0;
 }
+
 
 
 void PrintDeckAsTable(struct Card* head){
@@ -298,6 +299,45 @@ struct CardArray* setupGame(struct Card* origHead){
     struct Card* row7newCard;
     struct Card* row7prevCard = row7head;
 
+    //Creating F1-F4 lists
+    struct Card* F1head = origNewCard;
+    origNewCard = origNewCard->next;
+
+    F1head->next = NULL;
+    F1head->previous = NULL;
+    F1head->shown = false;
+    struct Card* F1newCard;
+    struct Card* F1prevCard = F1head;
+
+    struct Card* F2head = origNewCard;
+    origNewCard = origNewCard->next;
+
+    F2head->next = NULL;
+    F2head->previous = NULL;
+    F2head->shown = false;
+    struct Card* F2newCard;
+    struct Card* F2prevCard = F2head;
+
+    struct Card* F3head = origNewCard;
+    origNewCard = origNewCard->next;
+
+    F3head->next = NULL;
+    F3head->previous = NULL;
+    F3head->shown = false;
+    struct Card* F3newCard;
+    struct Card* F3prevCard = F3head;
+
+    struct Card* F4head = origNewCard;
+    origNewCard = origNewCard->next;
+
+    F4head->next = NULL;
+    F4head->previous = NULL;
+    F4head->shown = false;
+    struct Card* F4newCard;
+    struct Card* F4prevCard = F4head;
+
+
+
 
     int row2counter = 0;
     int row3counter = 0;
@@ -381,7 +421,7 @@ struct CardArray* setupGame(struct Card* origHead){
         row7prevCard = row7newCard;
 
     }
-    printTable(row1head, row2head, row3head, row4head, row5head, row6head, row7head);
+    printTable(row1head, row2head, row3head, row4head, row5head, row6head, row7head, F1head, F2head, F3head, F4head);
     struct CardArray* arr;
     arr->head1 = row1head;
     arr->head2 = row2head;
@@ -390,12 +430,17 @@ struct CardArray* setupGame(struct Card* origHead){
     arr->head5 = row5head;
     arr->head6 = row6head;
     arr->head7 = row7head;
+    arr->f11head = F1head;
+    arr->f22head = F2head;
+    arr->f33head = F3head;
+    arr->f44head = F4head;
+
 
     return arr;
 }
 
 void printTable(struct Card* head1, struct Card* head2, struct Card* head3, struct Card* head4, struct Card* head5,
-        struct Card* head6, struct Card* head7){
+        struct Card* head6, struct Card* head7, struct Card* f11head, struct Card* f22head, struct Card* f33head, struct Card* f44head){
     struct Card* row1 = head1;
     struct Card* row2 = head2;
     struct Card* row3 = head3;

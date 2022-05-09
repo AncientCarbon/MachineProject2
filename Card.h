@@ -28,6 +28,10 @@ struct CardArray{
     struct Card* head5;
     struct Card* head6;
     struct Card* head7;
+    struct Card* f11head;
+    struct Card* f22head;
+    struct Card* f33head;
+    struct Card* f44head;
 };
 
 #endif //MACHINEPROJECT2_CARD_H
