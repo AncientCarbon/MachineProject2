@@ -5,48 +5,54 @@
 #include "Card.h"
 
 
-void PrintDeckAsTable(struct Card* head);
-void showAllCards(struct Card* head);
-struct CardArray* setupGame(struct Card* head);
-void printCard(struct Card* card);
-void printTable(struct CardArray* cardArr);
-void saveDeck(struct Card* head);
-void moveCards(struct Card* fromColumn, char cardValue, char cardSuit, struct Card* toColumn);
-struct Card* getColumnAsHead(char in, struct CardArray* cardArray);
+void PrintDeckAsTable(struct Card *head);
+
+void showAllCards(struct Card *head);
+
+struct CardArray *setupGame(struct Card *head);
+
+void printCard(struct Card *card);
+
+void printTable(struct CardArray *cardArr);
+
+void saveDeck(struct Card *head);
+
+void moveCards(struct Card *fromColumn, char cardValue, char cardSuit, struct Card *toColumn);
+
+struct Card *getColumnAsHead(char in, struct CardArray *cardArray);
 
 //struct Card* shuffleDeck();
 int arrayGenerator();
 
-void moveCardToFoundation(char suit,struct Card *toColumn, struct Card *foundation);
+void moveCardToFoundation(char suit, struct Card *toColumn, struct Card *foundation);
 
 //Creating F1-F4 lists
-struct Card* F1head = NULL;
-struct Card* F2head = NULL;
-struct Card* F3head = NULL;
-struct Card* F4head = NULL;
+struct Card *F1head = NULL;
+struct Card *F2head = NULL;
+struct Card *F3head = NULL;
+struct Card *F4head = NULL;
 
 int main() {
     srand(time(NULL));// seeder vores pseudo number generator
     rand(); // kalder rand for at fixe et problem med første kort der var det samme i nogle minutter.
-    struct Card* head;
-    struct Card* newCard;
-    struct Card* prevCard;
+    struct Card *head;
+    struct Card *newCard;
+    struct Card *prevCard;
 
     char cmd1;
     char cmd2;
     printf("Command: ");
     scanf("%c%c", &cmd1, &cmd2);
 
-    FILE * file;
+    FILE *file;
     char line[5];
-    if (cmd1 == 'L' && cmd2 == 'D'){
+    if (cmd1 == 'L' && cmd2 == 'D') {
 
         file = fopen("..\\UnshuffledDeck.txt", "rt"); // TODO: Prompt der spørger om filnavn
-        if (file == NULL){
+        if (file == NULL) {
             printf("File not found, loading default deck\n\n");
             head = generateDeck();
-        }
-        else { // load decket fra en .txt fil
+        } else { // load decket fra en .txt fil
 
             printf("File found, loading deck...\n\n");
             head = (struct Card *) malloc(sizeof(struct Card));
@@ -61,7 +67,7 @@ int main() {
             head->value = line[0];
             head->suit = line[1];
 
-            while (fgets(line, 4, file) != NULL){
+            while (fgets(line, 4, file) != NULL) {
                 newCard = (struct Card *) malloc(sizeof(struct Card));
                 newCard->previous = prevCard;
                 prevCard->next = newCard;
@@ -74,59 +80,58 @@ int main() {
         }
     }
 
-    struct Card* currentDeck = head;
+    struct Card *currentDeck = head;
     bool started = false;
-    struct CardArray* cardArr;
-    while (true){
+    struct CardArray *cardArr;
+    while (true) {
         // dumpCmd is a bugfix. We don't know why, but the first char is a \n only half of the time.
 
         fflush(stdout);
         char dumpCmd;
         printf("Command: ");
         scanf("%c%c%c", &cmd1, &cmd2, &dumpCmd);
-        if (cmd1 == '\n'){
+        if (cmd1 == '\n') {
             cmd1 = cmd2;
             cmd2 = dumpCmd;
         }
 
         // quit the program
-        if (cmd1 == 'Q' && cmd2 == 'Q'){
+        if (cmd1 == 'Q' && cmd2 == 'Q') {
             printf("Quitting program...\n");
             break;
         }
 
-        // print the whole deck with all cards face-up
-        else if (cmd1 == 'S' && cmd2 == 'W'){
+            // print the whole deck with all cards face-up
+        else if (cmd1 == 'S' && cmd2 == 'W') {
             showAllCards(currentDeck);
             PrintDeckAsTable(currentDeck);
         }
 
-        // shuffle all cards in interleaved manner
-        else if (cmd1 == 'S' && cmd2 == 'I'){
+            // shuffle all cards in interleaved manner
+        else if (cmd1 == 'S' && cmd2 == 'I') {
             printf("Command not implemented\n");
         }
 
-        // Shuffle all cards in a random manner
-        else if (cmd1 == 'S' && cmd2 == 'R'){
+            // Shuffle all cards in a random manner
+        else if (cmd1 == 'S' && cmd2 == 'R') {
             currentDeck = shuffleDeck();
             PrintDeckAsTable(currentDeck);
         }
 
-        // Save game to speficied file from parameter
-        else if (cmd1 == 'S' && cmd2 == 'D'){
+            // Save game to speficied file from parameter
+        else if (cmd1 == 'S' && cmd2 == 'D') {
             saveDeck(currentDeck);
             //printf("Command not implemented\n");
         }
 
-        // Play the game using current deck
-        else if (cmd1 == 'P' && cmd2 == '\n'){
+            // Play the game using current deck
+        else if (cmd1 == 'P' && cmd2 == '\n') {
             printf("Setting up game...\n\n");
             cardArr = setupGame(currentDeck);
             started = true;
-        }
-        else printf("Command not recognized\n");
+        } else printf("Command not recognized\n");
 
-        while (started){
+        while (started) {
             /*
              * TODO: GAME MOVES
              * format: <from> -> <to>
@@ -165,21 +170,20 @@ int main() {
             printf("Input: ");
             scanf("%s", input);
             printf("\n");
-            if (input[0] == '\n'){
+            if (input[0] == '\n') {
                 int i = 1;
                 while (input[i] != '\0') {
-                    input[i-1] = input[i];
+                    input[i - 1] = input[i];
                     i++;
                 }
             }
-            if (input[0] == 'Q'){
+            if (input[0] == 'Q') {
                 printf("Returning to startup phase...\n");
                 currentDeck = shuffleDeck();
                 started = false;
-            }
-            else {
-                if (input[0] == 'C'){
-                    switch (input[1]){
+            } else {
+                if (input[0] == 'C') {
+                    switch (input[1]) {
                         case ('1'): {
                             moveCards(cardArr->head1, input[3], input[4],
                                       getColumnAsHead(input[8], cardArr));
@@ -227,23 +231,22 @@ int main() {
 }
 
 
+void PrintDeckAsTable(struct Card *head) {
 
-void PrintDeckAsTable(struct Card* head){
-
-    struct Card* newCard = head;
+    struct Card *newCard = head;
 
     printf("C1\tC2\tC3\tC4\tC5\tC6\tC7\n\n");
 
     int rowNumber = 0;
     int lineNumber = 0;
-    for (int i = 0; i < 52; i++){
+    for (int i = 0; i < 52; i++) {
         rowNumber++;
 
         printCard(newCard);
 
-        if (rowNumber == 7){
+        if (rowNumber == 7) {
             lineNumber++;
-            if (lineNumber % 2 == 1 && lineNumber <= 8) printf("\t\t[]\tF%d", (lineNumber/2)+1);
+            if (lineNumber % 2 == 1 && lineNumber <= 8) printf("\t\t[]\tF%d", (lineNumber / 2) + 1);
 
             printf("\n");
             rowNumber = 0;
@@ -253,74 +256,74 @@ void PrintDeckAsTable(struct Card* head){
     printf("\n\n\n");
 }
 
-void showAllCards(struct Card* head){
-    struct Card* newCard = head;
-    for (int i = 0; i < 52; i++){
+void showAllCards(struct Card *head) {
+    struct Card *newCard = head;
+    for (int i = 0; i < 52; i++) {
         newCard->shown = true;
         newCard = newCard->next;
     }
 }
 
-struct CardArray* setupGame(struct Card* origHead){
-    struct Card* origNewCard = origHead;
+struct CardArray *setupGame(struct Card *origHead) {
+    struct Card *origNewCard = origHead;
 
-    struct Card* row1head = origNewCard;
+    struct Card *row1head = origNewCard;
     origNewCard = origNewCard->next;
     row1head->next = NULL;
     row1head->previous = NULL;
     row1head->shown = true;
-    struct Card* row1newCard;
-    struct Card* row1prevCard = row1head;
+    struct Card *row1newCard;
+    struct Card *row1prevCard = row1head;
 
 
-    struct Card* row2head = origNewCard;
+    struct Card *row2head = origNewCard;
     origNewCard = origNewCard->next;
     row2head->next = NULL;
     row2head->previous = NULL;
     row2head->shown = false;
-    struct Card* row2newCard;
-    struct Card* row2prevCard = row2head;
+    struct Card *row2newCard;
+    struct Card *row2prevCard = row2head;
 
 
-    struct Card* row3head = origNewCard;
+    struct Card *row3head = origNewCard;
     origNewCard = origNewCard->next;
     row3head->next = NULL;
     row3head->previous = NULL;
     row3head->shown = false;
-    struct Card* row3newCard;
-    struct Card* row3prevCard = row3head;
+    struct Card *row3newCard;
+    struct Card *row3prevCard = row3head;
 
-    struct Card* row4head = origNewCard;
+    struct Card *row4head = origNewCard;
     origNewCard = origNewCard->next;
     row4head->next = NULL;
     row4head->previous = NULL;
     row4head->shown = false;
-    struct Card* row4newCard;
-    struct Card* row4prevCard = row4head;
+    struct Card *row4newCard;
+    struct Card *row4prevCard = row4head;
 
-    struct Card* row5head = origNewCard;
+    struct Card *row5head = origNewCard;
     origNewCard = origNewCard->next;
     row5head->next = NULL;
     row5head->previous = NULL;
     row5head->shown = false;
-    struct Card* row5newCard;
-    struct Card* row5prevCard = row5head;
+    struct Card *row5newCard;
+    struct Card *row5prevCard = row5head;
 
-    struct Card* row6head = origNewCard;
+    struct Card *row6head = origNewCard;
     origNewCard = origNewCard->next;
     row6head->next = NULL;
     row6head->previous = NULL;
     row6head->shown = false;
-    struct Card* row6newCard;
-    struct Card* row6prevCard = row6head;
+    struct Card *row6newCard;
+    struct Card *row6prevCard = row6head;
 
-    struct Card* row7head = origNewCard;
+    struct Card *row7head = origNewCard;
     origNewCard = origNewCard->next;
     row7head->next = NULL;
     row7head->previous = NULL;
     row7head->shown = false;
-    struct Card* row7newCard;
-    struct Card* row7prevCard = row7head;
+    struct Card *row7newCard;
+    struct Card *row7prevCard = row7head;
 
     //Creating F1-F4 lists
     /* struct Card* F1head = origNewCard;
@@ -369,7 +372,7 @@ struct CardArray* setupGame(struct Card* origHead){
     int row6counter = 0;
     int row7counter = 0;
     for (int i = 0; i < 45; i++) {
-        if (row2counter <5) {
+        if (row2counter < 5) {
             row2newCard = origNewCard;
             origNewCard = origNewCard->next;
             row2newCard->previous = row2prevCard;
@@ -386,7 +389,7 @@ struct CardArray* setupGame(struct Card* origHead){
             row3newCard->previous = row3prevCard;
             row3prevCard->next = row3newCard;
             row3newCard->next = NULL;
-            if (row3counter < 1){
+            if (row3counter < 1) {
                 row3newCard->shown = false;
             } else row3newCard->shown = true;
             row3prevCard = row3newCard;
@@ -399,7 +402,7 @@ struct CardArray* setupGame(struct Card* origHead){
             row4newCard->previous = row4prevCard;
             row4prevCard->next = row4newCard;
             row4newCard->next = NULL;
-            if (row4counter < 2){
+            if (row4counter < 2) {
                 row4newCard->shown = false;
             } else row4newCard->shown = true;
             row4prevCard = row4newCard;
@@ -412,7 +415,7 @@ struct CardArray* setupGame(struct Card* origHead){
             row5newCard->previous = row5prevCard;
             row5prevCard->next = row5newCard;
             row5newCard->next = NULL;
-            if (row5counter < 3){
+            if (row5counter < 3) {
                 row5newCard->shown = false;
             } else row5newCard->shown = true;
             row5prevCard = row5newCard;
@@ -425,7 +428,7 @@ struct CardArray* setupGame(struct Card* origHead){
             row6newCard->previous = row6prevCard;
             row6prevCard->next = row6newCard;
             row6newCard->next = NULL;
-            if (row6counter < 4){
+            if (row6counter < 4) {
                 row6newCard->shown = false;
             } else row6newCard->shown = true;
             row6prevCard = row6newCard;
@@ -437,7 +440,7 @@ struct CardArray* setupGame(struct Card* origHead){
         row7newCard->previous = row7prevCard;
         row7prevCard->next = row7newCard;
         row7newCard->next = NULL;
-        if (row7counter < 5){
+        if (row7counter < 5) {
             row7newCard->shown = false;
         } else row7newCard->shown = true;
         row7counter++;
@@ -446,7 +449,7 @@ struct CardArray* setupGame(struct Card* origHead){
     }
 
     struct CardArray *arr;
-    arr = (struct CardArray*)malloc(sizeof(struct CardArray));
+    arr = (struct CardArray *) malloc(sizeof(struct CardArray));
     arr->head1 = row1head;
     arr->head2 = row2head;
     arr->head3 = row3head;
@@ -465,44 +468,45 @@ struct CardArray* setupGame(struct Card* origHead){
     return arr;
 }
 
-void printTable(struct CardArray* cardArr){
+void printTable(struct CardArray *cardArr) {
 
 //struct Card* head1, struct Card* head2, struct Card* head3, struct Card* head4, struct Card* head5,
 //        struct Card* head6, struct Card* head7){
-    struct Card* row1 = cardArr->head1;
-    struct Card* row2 = cardArr->head2;
-    struct Card* row3 = cardArr->head3;
-    struct Card* row4 = cardArr->head4;
-    struct Card* row5 = cardArr->head5;
-    struct Card* row6 = cardArr->head6;
-    struct Card* row7 = cardArr->head7;
+    struct Card *row1 = cardArr->head1;
+    struct Card *row2 = cardArr->head2;
+    struct Card *row3 = cardArr->head3;
+    struct Card *row4 = cardArr->head4;
+    struct Card *row5 = cardArr->head5;
+    struct Card *row6 = cardArr->head6;
+    struct Card *row7 = cardArr->head7;
 
     printf("C1\tC2\tC3\tC4\tC5\tC6\tC7\n\n");
 
     int lineCounter = 1;
 
-    while (row1 != NULL || row2 != NULL || row3 != NULL || row4 != NULL || row5 != NULL || row6 != NULL || row7 != NULL){
-       if (row1 != NULL){
-           printCard(row1);
-           row1 = row1->next;
-       } else printf("\t");
+    while (row1 != NULL || row2 != NULL || row3 != NULL || row4 != NULL || row5 != NULL || row6 != NULL ||
+           row7 != NULL) {
+        if (row1 != NULL) {
+            printCard(row1);
+            row1 = row1->next;
+        } else printf("\t");
 
-        if (row2 != NULL){
+        if (row2 != NULL) {
             printCard(row2);
             row2 = row2->next;
         } else printf("\t");
 
-        if (row3 != NULL){
+        if (row3 != NULL) {
             printCard(row3);
             row3 = row3->next;
         } else printf("\t");
 
-        if (row4 != NULL){
+        if (row4 != NULL) {
             printCard(row4);
             row4 = row4->next;
         } else printf("\t");
 
-        if (row5 != NULL){
+        if (row5 != NULL) {
             printCard(row5);
             row5 = row5->next;
         } else printf("\t");
@@ -517,31 +521,31 @@ void printTable(struct CardArray* cardArr){
             row7 = row7->next;
         } else printf("\t");
 
-        if (lineCounter % 2 == 1 && (lineCounter/2) < 4) printf("\t\t[] F%d", (lineCounter/2)+1);
+        if (lineCounter % 2 == 1 && (lineCounter / 2) < 4) printf("\t\t[] F%d", (lineCounter / 2) + 1);
         printf("\n");
         lineCounter++;
     }
 
 }
-void printCard(struct Card* card){
-    if (!card->shown){
+
+void printCard(struct Card *card) {
+    if (!card->shown) {
         printf("[]\t");
-    }
-    else printf("%c%c\t", card->value, card->suit);
+    } else printf("%c%c\t", card->value, card->suit);
 }
 
-void saveDeck(struct Card* head){
-    char deck[4*52];
-    FILE* file;
+void saveDeck(struct Card *head) {
+    char deck[4 * 52];
+    FILE *file;
     file = fopen("..\\Cards.txt", "w");
-    if (file == NULL){
+    if (file == NULL) {
         printf("Error opening file.\n");
     }
 
-    for (int i = 0; i < 52; i++){
+    for (int i = 0; i < 52; i++) {
         //deck[i]=head;
         printf("%c%c\n", head->value, head->suit);
-        fprintf(file,"%c%c\n", head->value, head->suit);
+        fprintf(file, "%c%c\n", head->value, head->suit);
         head = head->next;
     }
 
@@ -549,119 +553,110 @@ void saveDeck(struct Card* head){
 }
 
 // fromColumn og toColumn er altid givet som head
-void moveCards(struct Card* fromColumn, char cardValue, char cardSuit, struct Card* toColumn){
-    struct Card* fromColumnNewCard = fromColumn;
-    struct Card* toColumnNewCard = toColumn;
-
-    if (toColumn->suit=='F')
-    {
+void moveCards(struct Card *fromColumn, char cardValue, char cardSuit, struct Card *toColumn) {
+    if (toColumn->suit == 'F') {
         switch (toColumn->value) {
             case '1':
-                moveCardToFoundation('H',toColumn, F1head);
+                moveCardToFoundation('H', toColumn, F1head);
                 break;
             case '2':
-                moveCardToFoundation('D',toColumn, F2head);
+                moveCardToFoundation('D', toColumn, F2head);
 
                 break;
             case '3':
-                moveCardToFoundation('C',toColumn, F3head);
+                moveCardToFoundation('C', toColumn, F3head);
 
                 break;
             case '4':
-                moveCardToFoundation('S',toColumn, F4head);
+                moveCardToFoundation('S', toColumn, F4head);
 
                 break;
             default:
                 printf("illegal foundation number\n");
                 break;
         }
-    }
-    else {
-        while (cardValue != fromColumnNewCard->value || cardSuit != fromColumnNewCard->suit) {
-    while (cardValue != fromColumn->value || cardSuit != fromColumn->suit) {
+    } else {
+        while (cardValue != fromColumn->value || cardSuit != fromColumn->suit) {
 
-        if (fromColumn->next == NULL){
-            printf("Error\n");
-            return;
-        }
-        if (!fromColumn->shown){
-            fromColumn = fromColumn->next;
-            continue;
-        }
-        fromColumn = fromColumn->next;
-    }
-            fromColumnNewCard = fromColumnNewCard->next;
-            if (fromColumnNewCard == NULL) {
+            if (fromColumn->next == NULL) {
                 printf("Error\n");
                 return;
             }
+            if (!fromColumn->shown) {
+                fromColumn = fromColumn->next;
+                continue;
+            }
+            fromColumn = fromColumn->next;
         }
+    }
 
-        while (toColumnNewCard->next != NULL) {
-            toColumnNewCard = toColumnNewCard->next;
-        }
-        fromColumnNewCard->previous->next = NULL;
-        toColumnNewCard->next = fromColumnNewCard;
-        fromColumnNewCard->previous = toColumnNewCard;
     // finder det sidste kort i toColumn
-    while (toColumn->next != NULL){
+    while (toColumn->next != NULL) {
         toColumn = toColumn->next;
     }
-    fromColumn->previous->next = NULL;
-    if (!fromColumn->previous->shown){
+
+    if (fromColumn->previous != NULL && !fromColumn->previous->shown) {
         fromColumn->previous->shown = true;
     }
+    if (fromColumn->previous != NULL) {
+        fromColumn->previous->next = NULL;
+    } else fromColumn = NULL;
 
     toColumn->next = fromColumn;
     fromColumn->previous = toColumn;
 
-    }
-
 }
 
 void moveCardToFoundation(char suit, struct Card *toColumn, struct Card *foundation) {
-    if (toColumn->suit == suit){
-        if (F1head->previous==NULL && F1head->value=='\0' && toColumn->value=='A') {
-            F1head=(struct Card*) malloc(sizeof(struct Card) );
+    if (toColumn->suit == suit) {
+        if (F1head->previous == NULL && F1head->value == '\0' && toColumn->value == 'A') {
+            F1head = (struct Card *) malloc(sizeof(struct Card));
             F1head->value = toColumn->value;
             F1head->shown = toColumn->shown;
-            F1head->index=toColumn->index;
-            F1head->suit=toColumn->suit;
-            toColumn->previous->next=toColumn->next;
+            F1head->index = toColumn->index;
+            F1head->suit = toColumn->suit;
+            toColumn->previous->next = toColumn->next;
             free(toColumn);
-        }
-        else if ((int)(toColumn->value)==(int)(F1head->value)+1){
-            struct Card* prev=F1head;
-            F1head=(struct Card*) malloc(sizeof(struct Card) );
-            prev->next=F1head;
-            F1head->previous=prev;
+        } else if ((int) (toColumn->value) == (int) (F1head->value) + 1) {
+            struct Card *prev = F1head;
+            F1head = (struct Card *) malloc(sizeof(struct Card));
+            prev->next = F1head;
+            F1head->previous = prev;
             F1head->value = toColumn->value;
             F1head->shown = toColumn->shown;
-            F1head->index=toColumn->index;
-            F1head->suit=toColumn->suit;
-            toColumn->previous->next=toColumn->next;
+            F1head->index = toColumn->index;
+            F1head->suit = toColumn->suit;
+            toColumn->previous->next = toColumn->next;
             free(toColumn);
         }
-    }
-    else{
+    } else {
         printf("illegal move\n");
     }
 
 }
 
-struct Card* getColumnAsHead(char in, struct CardArray* cardArray){
+struct Card *getColumnAsHead(char in, struct CardArray *cardArray) {
 
     // ASCII values 49-55 er 1-7
     int rowNr = (int) in;
-    rowNr = rowNr-48; // trækker ascii værdi fra
-    switch (rowNr){
-        case(1): return cardArray->head1;
-        case(2): return cardArray->head2;
-        case(3): return cardArray->head3;
-        case(4): return cardArray->head4;
-        case(5): return cardArray->head5;
-        case(6): return cardArray->head6;
-        case(7): return cardArray->head7;
-        default: printf("Error\n"); return 0;
+    rowNr = rowNr - 48; // trækker ascii værdi fra
+    switch (rowNr) {
+        case (1):
+            return cardArray->head1;
+        case (2):
+            return cardArray->head2;
+        case (3):
+            return cardArray->head3;
+        case (4):
+            return cardArray->head4;
+        case (5):
+            return cardArray->head5;
+        case (6):
+            return cardArray->head6;
+        case (7):
+            return cardArray->head7;
+        default:
+            printf("Error\n");
+            return 0;
     }
 }
