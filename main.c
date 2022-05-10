@@ -607,25 +607,26 @@ void moveCards(struct Card *fromColumn, char cardValue, char cardSuit, struct Ca
 
 }
 
-void moveCardToFoundation(char suit, struct Card *toColumn, struct Card *foundation) {
-    if (toColumn->suit == suit) {
-        if (F1head->previous == NULL && F1head->value == '\0' && toColumn->value == 'A') {
-            F1head = (struct Card *) malloc(sizeof(struct Card));
-            F1head->value = toColumn->value;
-            F1head->shown = toColumn->shown;
-            F1head->index = toColumn->index;
-            F1head->suit = toColumn->suit;
+void moveCardToFoundation(char value, struct Card *toColumn, struct Card *foundation) {
+    if (toColumn->value == value) {
+        if (foundation->previous == NULL && foundation->value == '\0' && toColumn->value == 'A') {
+            //foundation = (struct Card *) malloc(sizeof(struct Card));
+            foundation->value = toColumn->value;
+            foundation->shown = true;
+            foundation->index = toColumn->index;
+            foundation->suit = toColumn->suit;
             toColumn->previous->next = toColumn->next;
             free(toColumn);
         } else if ((int) (toColumn->value) == (int) (F1head->value) + 1) {
-            struct Card *prev = F1head;
-            F1head = (struct Card *) malloc(sizeof(struct Card));
-            prev->next = F1head;
-            F1head->previous = prev;
-            F1head->value = toColumn->value;
-            F1head->shown = toColumn->shown;
-            F1head->index = toColumn->index;
-            F1head->suit = toColumn->suit;
+            struct Card *prev = foundation;
+            prev->shown = false;
+            foundation = (struct Card *) malloc(sizeof(struct Card));
+            prev->next = foundation;
+            foundation->previous = prev;
+            foundation->value = toColumn->value;
+            foundation->shown = true;
+            foundation->index = toColumn->index;
+            foundation->suit = toColumn->suit;
             toColumn->previous->next = toColumn->next;
             free(toColumn);
         }
