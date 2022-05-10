@@ -561,8 +561,13 @@ void moveCards(struct Card* fromColumn, char cardValue, char cardSuit, struct Ca
         toColumn = toColumn->next;
     }
     fromColumn->previous->next = NULL;
+    if (!fromColumn->previous->shown){
+        fromColumn->previous->shown = true;
+    }
+
     toColumn->next = fromColumn;
     fromColumn->previous = toColumn;
+
 
 
 }
