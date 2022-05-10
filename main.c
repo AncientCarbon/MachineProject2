@@ -211,12 +211,13 @@ int main() {
                             break;
                         }
                         case ('7'): {
-                            moveCards(cardArr->head7, input[4], input[5],
+                            moveCards(cardArr->head7, input[3], input[4],
                                       getColumnAsHead(input[8], cardArr));
                             break;
 
                         }
                     }
+                    printTable(cardArr);
                 }
             }
         }
@@ -261,12 +262,6 @@ void showAllCards(struct Card* head){
 }
 
 struct CardArray* setupGame(struct Card* origHead){
-    //Creating F1-F4 lists
-    F1head = (struct Card*)malloc(sizeof(struct Card));
-    F2head = (struct Card*)malloc(sizeof(struct Card));
-    F3head = (struct Card*)malloc(sizeof(struct Card));
-    F4head = (struct Card*)malloc(sizeof(struct Card));
-
     struct Card* origNewCard = origHead;
 
     struct Card* row1head = origNewCard;
@@ -536,7 +531,7 @@ void printCard(struct Card* card){
 }
 
 void saveDeck(struct Card* head){
-    //char deck[4*52];
+    char deck[4*52];
     FILE* file;
     file = fopen("..\\Cards.txt", "w");
     if (file == NULL){
@@ -613,6 +608,10 @@ void moveCards(struct Card* fromColumn, char cardValue, char cardSuit, struct Ca
         toColumn = toColumn->next;
     }
     fromColumn->previous->next = NULL;
+    if (!fromColumn->previous->shown){
+        fromColumn->previous->shown = true;
+    }
+
     toColumn->next = fromColumn;
     fromColumn->previous = toColumn;
 
@@ -647,6 +646,7 @@ void moveCardToFoundation(char suit, struct Card *toColumn, struct Card *foundat
     else{
         printf("illegal move\n");
     }
+
 }
 
 struct Card* getColumnAsHead(char in, struct CardArray* cardArray){
