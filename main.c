@@ -18,7 +18,7 @@ void printTable(struct CardArray *cardArr);
 void saveDeck(struct Card *head);
 
 void moveCards(struct Card *fromColumn, char cardValue, char cardSuit, struct Card *toColumn);
-
+struct Card *getFoundationAsHead(char in);
 struct Card *getColumnAsHead(char in, struct CardArray *cardArray);
 
 //struct Card* shuffleDeck();
@@ -185,44 +185,72 @@ int main() {
                 if (input[0] == 'C') {
                     switch (input[1]) {
                         case ('1'): {
-                            moveCards(cardArr->head1, input[3], input[4],
-                                      getColumnAsHead(input[8], cardArr));
-                            break;
+                            if (input[7] == 'F') {
+                                moveCardToFoundation(input[3], cardArr->head1, getFoundationAsHead(input[8]));
+                            } else {
+                                moveCards(cardArr->head1, input[3], input[4],
+                                          getColumnAsHead(input[8], cardArr));
+                                break;
+                            }
                         }
                         case ('2'): {
-                            moveCards(cardArr->head2, input[3], input[4],
-                                      getColumnAsHead(input[8], cardArr));
+                            if (input[7] == 'F') {
+                                moveCardToFoundation(input[3], cardArr->head2, getFoundationAsHead(input[8]));
+                            } else {
+                                moveCards(cardArr->head2, input[3], input[4],
+                                          getColumnAsHead(input[8], cardArr));
+                            }
                             break;
                         }
                         case ('3'): {
-                            moveCards(cardArr->head3, input[3], input[4],
-                                      getColumnAsHead(input[8], cardArr));
-                            break;
+                            if (input[7] == 'F') {
+                                moveCardToFoundation(input[3], cardArr->head3, getFoundationAsHead(input[8]));
+                            } else {
+                                moveCards(cardArr->head3, input[3], input[4],
+                                          getColumnAsHead(input[8], cardArr));
+                                break;
+                            }
                         }
                         case ('4'): {
-                            moveCards(cardArr->head4, input[3], input[4],
-                                      getColumnAsHead(input[8], cardArr));
-                            break;
+                            if (input[7] == 'F') {
+                                moveCardToFoundation(input[3],cardArr->head4 ,getFoundationAsHead(input[8]) );
+                            } else {
+                                moveCards(cardArr->head4, input[3], input[4],
+                                          getColumnAsHead(input[8], cardArr));
+                                break;
+                            }
                         }
                         case ('5'): {
-                            moveCards(cardArr->head5, input[3], input[4],
-                                      getColumnAsHead(input[8], cardArr));
-                            break;
-                        }
-                        case ('6'): {
-                            moveCards(cardArr->head6, input[3], input[4],
-                                      getColumnAsHead(input[8], cardArr));
-                            break;
-                        }
-                        case ('7'): {
-                            moveCards(cardArr->head7, input[3], input[4],
-                                      getColumnAsHead(input[8], cardArr));
-                            break;
+                            if (input[7] == 'F') {
+                                moveCardToFoundation(input[3], cardArr->head5, getFoundationAsHead(input[8]));
+                            } else {
+                                moveCards(cardArr->head5, input[3], input[4],
+                                          getColumnAsHead(input[8], cardArr));
+                                break;
+                            }
 
                         }
+                        case ('6'): {
+                            if (input[7] == 'F') {
+                                moveCardToFoundation(input[3], cardArr->head6, getFoundationAsHead(input[8]));
+                            } else {
+                                moveCards(cardArr->head6, input[3], input[4],
+                                          getColumnAsHead(input[8], cardArr));
+                                break;
+                            }
+                        }
+                        case ('7'): {
+                            if (input[7] == 'F') {
+                                moveCardToFoundation(input[3], cardArr->head7, getFoundationAsHead(input[8]));
+                            } else {
+                                moveCards(cardArr->head7, input[3], input[4],
+                                          getColumnAsHead(input[8], cardArr));
+                                break;
+                            }
+                        }
                     }
-                    printTable(cardArr);
                 }
+                printTable(cardArr);
             }
         }
     }
@@ -265,6 +293,34 @@ void showAllCards(struct Card *head) {
 }
 
 struct CardArray *setupGame(struct Card *origHead) {
+    F1head=(struct Card *) malloc(sizeof (struct Card));
+    F1head->next=NULL;
+    F1head->previous=NULL;
+    F1head->shown=false;
+    F1head->value='\0';
+    F1head->suit='\0';
+    F1head->index=-1;
+    F2head=(struct Card *) malloc(sizeof (struct Card));
+    F2head->next=NULL;
+    F2head->previous=NULL;
+    F2head->shown=false;
+    F2head->value='\0';
+    F2head->suit='\0';
+    F2head->index=-1;
+    F3head=(struct Card *) malloc(sizeof (struct Card));
+    F3head->next=NULL;
+    F3head->previous=NULL;
+    F3head->shown=false;
+    F3head->value='\0';
+    F3head->suit='\0';
+    F3head->index=-1;
+    F4head=(struct Card *) malloc(sizeof (struct Card));
+    F4head->next=NULL;
+    F4head->previous=NULL;
+    F4head->shown=false;
+    F4head->value='\0';
+    F4head->suit='\0';
+    F4head->index=-1;
     struct Card *origNewCard = origHead;
 
     struct Card *row1head = origNewCard;
@@ -326,7 +382,7 @@ struct CardArray *setupGame(struct Card *origHead) {
     struct Card *row7prevCard = row7head;
 
     //Creating F1-F4 lists
-    /* struct Card* F1head = origNewCard;
+    /*struct Card* F1head = origNewCard;
     origNewCard = origNewCard->next;
 
     F1head->next = NULL;
@@ -360,8 +416,8 @@ struct CardArray *setupGame(struct Card *origHead) {
     F4head->previous = NULL;
     F4head->shown = false;
     struct Card* F4newCard;
-    struct Card* F4prevCard = F4head; */
-
+    struct Card* F4prevCard = F4head;
+*/
 
 
 
@@ -609,18 +665,16 @@ void moveCards(struct Card *fromColumn, char cardValue, char cardSuit, struct Ca
 
 void moveCardToFoundation(char value, struct Card *toColumn, struct Card *foundation) {
     if (toColumn->value == value) {
-        if (foundation->previous == NULL && foundation->value == '\0' && toColumn->value == 'A') {
-            //foundation = (struct Card *) malloc(sizeof(struct Card));
+        if (foundation->previous == NULL && (int)foundation->value == 0 && toColumn->value == 'A') {
             foundation->value = toColumn->value;
             foundation->shown = true;
             foundation->index = toColumn->index;
             foundation->suit = toColumn->suit;
             toColumn->previous->next = toColumn->next;
-            free(toColumn);
-        } else if ((int) (toColumn->value) == (int) (F1head->value) + 1) {
+            printf("det er et es");
+        } else if ((int) (toColumn->value) == (int) (foundation->value) + 1) {
             struct Card *prev = foundation;
             prev->shown = false;
-            foundation = (struct Card *) malloc(sizeof(struct Card));
             prev->next = foundation;
             foundation->previous = prev;
             foundation->value = toColumn->value;
@@ -628,14 +682,27 @@ void moveCardToFoundation(char value, struct Card *toColumn, struct Card *founda
             foundation->index = toColumn->index;
             foundation->suit = toColumn->suit;
             toColumn->previous->next = toColumn->next;
-            free(toColumn);
+            printf("vi er nu ikke i es");
         }
     } else {
         printf("illegal move\n");
     }
 
 }
-
+struct Card *getFoundationAsHead(char in){
+    switch (in) {
+        case '1':
+            return F1head;
+        case '2':
+            return F2head;
+        case '3':
+            return F3head;
+        case '4':
+            return F4head;
+        default:
+            return NULL;
+    }
+}
 struct Card *getColumnAsHead(char in, struct CardArray *cardArray) {
 
     // ASCII values 49-55 er 1-7
