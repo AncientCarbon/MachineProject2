@@ -18,6 +18,14 @@ struct Card* getColumnAsHead(char in, struct CardArray* cardArray);
 //struct Card* shuffleDeck();
 int arrayGenerator();
 
+void moveCardToFoundation(char suit,struct Card *toColumn, struct Card *foundation);
+
+//Creating F1-F4 lists
+struct Card* F1head = NULL;
+struct Card* F2head = NULL;
+struct Card* F3head = NULL;
+struct Card* F4head = NULL;
+
 int main() {
     srand(time(NULL));// seeder vores pseudo number generator
     rand(); // kalder rand for at fixe et problem med første kort der var det samme i nogle minutter.
@@ -105,7 +113,7 @@ int main() {
 
         // Save game to speficied file from parameter
         else if (cmd1 == 'S' && cmd2 == 'D'){
-            saveDeck(head);
+            saveDeck(currentDeck);
             //printf("Command not implemented\n");
         }
 
@@ -118,6 +126,7 @@ int main() {
         else printf("Command not recognized\n");
 
         while (started){
+
             /*
              * TODO: GAME MOVES
              * format: <from> -> <to>
@@ -251,6 +260,12 @@ void showAllCards(struct Card* head){
 }
 
 struct CardArray* setupGame(struct Card* origHead){
+    //Creating F1-F4 lists
+    F1head = (struct Card*)malloc(sizeof(struct Card));
+    F2head = (struct Card*)malloc(sizeof(struct Card));
+    F3head = (struct Card*)malloc(sizeof(struct Card));
+    F4head = (struct Card*)malloc(sizeof(struct Card));
+
     struct Card* origNewCard = origHead;
 
     struct Card* row1head = origNewCard;
@@ -312,6 +327,10 @@ struct CardArray* setupGame(struct Card* origHead){
     struct Card* row7prevCard = row7head;
 
     //Creating F1-F4 lists
+    //struct Card* F1head = NULL;
+    //struct Card* F2head = NULL;
+    //struct Card* F3head = NULL;
+    //struct Card* F4head = NULL;
     /* struct Card* F1head = origNewCard;
     origNewCard = origNewCard->next;
 
@@ -516,7 +535,7 @@ void printCard(struct Card* card){
 }
 
 void saveDeck(struct Card* head){
-    char deck[4*52];
+    //char deck[4*52];
     FILE* file;
     file = fopen("..\\Cards.txt", "w");
     if (file == NULL){
@@ -537,23 +556,77 @@ void moveCards(struct Card* fromColumn, char cardValue, char cardSuit, struct Ca
     struct Card* fromColumnNewCard = fromColumn;
     struct Card* toColumnNewCard = toColumn;
 
-    while (cardValue != fromColumnNewCard->value || cardSuit != fromColumnNewCard->suit) {
+    if (toColumn->suit=='F')
+    {
+        switch (toColumn->value) {
+            case '1':
+                moveCardToFoundation('H',toColumn, F1head);
+                break;
+            case '2':
+                moveCardToFoundation('D',toColumn, F2head);
 
-        fromColumnNewCard = fromColumnNewCard->next;
-        if (fromColumnNewCard == NULL){
-            printf("Error\n");
-            return;
+                break;
+            case '3':
+                moveCardToFoundation('C',toColumn, F3head);
+
+                break;
+            case '4':
+                moveCardToFoundation('S',toColumn, F4head);
+
+                break;
+            default:
+                printf("illegal foundation number\n");
+                break;
         }
     }
+    else {
+        while (cardValue != fromColumnNewCard->value || cardSuit != fromColumnNewCard->suit) {
 
-    while (toColumnNewCard->next != NULL){
-        toColumnNewCard = toColumnNewCard->next;
+            fromColumnNewCard = fromColumnNewCard->next;
+            if (fromColumnNewCard == NULL) {
+                printf("Error\n");
+                return;
+            }
+        }
+
+        while (toColumnNewCard->next != NULL) {
+            toColumnNewCard = toColumnNewCard->next;
+        }
+        fromColumnNewCard->previous->next = NULL;
+        toColumnNewCard->next = fromColumnNewCard;
+        fromColumnNewCard->previous = toColumnNewCard;
+
     }
-    fromColumnNewCard->previous->next = NULL;
-    toColumnNewCard->next = fromColumnNewCard;
-    fromColumnNewCard->previous = toColumnNewCard;
 
+}
 
+void moveCardToFoundation(char suit, struct Card *toColumn, struct Card *foundation) {
+    if (toColumn->suit == suit){
+        if (F1head->previous==NULL && F1head->value=='\0' && toColumn->value=='A') {
+            F1head=(struct Card*) malloc(sizeof(struct Card) );
+            F1head->value = toColumn->value;
+            F1head->shown = toColumn->shown;
+            F1head->index=toColumn->index;
+            F1head->suit=toColumn->suit;
+            toColumn->previous->next=toColumn->next;
+            free(toColumn);
+        }
+        else if ((int)(toColumn->value)==(int)(F1head->value)+1){
+            struct Card* prev=F1head;
+            F1head=(struct Card*) malloc(sizeof(struct Card) );
+            prev->next=F1head;
+            F1head->previous=prev;
+            F1head->value = toColumn->value;
+            F1head->shown = toColumn->shown;
+            F1head->index=toColumn->index;
+            F1head->suit=toColumn->suit;
+            toColumn->previous->next=toColumn->next;
+            free(toColumn);
+        }
+    }
+    else{
+        printf("illegal move\n");
+    }
 }
 
 struct Card* getColumnAsHead(char in, struct CardArray* cardArray){
