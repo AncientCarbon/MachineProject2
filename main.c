@@ -9,8 +9,7 @@ void PrintDeckAsTable(struct Card* head);
 void showAllCards(struct Card* head);
 struct CardArray* setupGame(struct Card* head);
 void printCard(struct Card* card);
-void printTable(struct Card* head1, struct Card* head2, struct Card* head3, struct Card* head4, struct Card* head5,
-                struct Card* head6, struct Card* head7);
+void printTable(struct CardArray* cardArr);
 void saveDeck(struct Card* head);
 void moveCards(struct Card* fromColumn, char cardValue, char cardSuit, struct Card* toColumn);
 struct Card* getColumnAsHead(char in, struct CardArray* cardArray);
@@ -72,6 +71,8 @@ int main() {
     struct CardArray* cardArr;
     while (true){
         // dumpCmd is a bugfix. We don't know why, but the first char is a \n only half of the time.
+
+        fflush(stdout);
         char dumpCmd;
         printf("Command: ");
         scanf("%c%c%c", &cmd1, &cmd2, &dumpCmd);
@@ -151,6 +152,7 @@ int main() {
              *
              */
 
+            fflush(stdout);
             char input[20];
             printf("Input: ");
             scanf("%s", input);
@@ -171,42 +173,43 @@ int main() {
                 if (input[0] == 'C'){
                     switch (input[1]){
                         case ('1'): {
-                            moveCards(cardArr->head1, input[4], input[5],
+                            moveCards(cardArr->head1, input[3], input[4],
                                       getColumnAsHead(input[8], cardArr));
                             break;
                         }
                         case ('2'): {
-                            moveCards(cardArr->head2, input[4], input[5],
+                            moveCards(cardArr->head2, input[3], input[4],
                                       getColumnAsHead(input[8], cardArr));
                             break;
                         }
                         case ('3'): {
-                            moveCards(cardArr->head3, input[4], input[5],
+                            moveCards(cardArr->head3, input[3], input[4],
                                       getColumnAsHead(input[8], cardArr));
                             break;
                         }
                         case ('4'): {
-                            moveCards(cardArr->head4, input[4], input[5],
+                            moveCards(cardArr->head4, input[3], input[4],
                                       getColumnAsHead(input[8], cardArr));
                             break;
                         }
                         case ('5'): {
-                            moveCards(cardArr->head5, input[4], input[5],
+                            moveCards(cardArr->head5, input[3], input[4],
                                       getColumnAsHead(input[8], cardArr));
                             break;
                         }
                         case ('6'): {
-                            moveCards(cardArr->head6, input[4], input[5],
+                            moveCards(cardArr->head6, input[3], input[4],
                                       getColumnAsHead(input[8], cardArr));
                             break;
                         }
                         case ('7'): {
-                            moveCards(cardArr->head7, input[4], input[5],
+                            moveCards(cardArr->head7, input[3], input[4],
                                       getColumnAsHead(input[8], cardArr));
                             break;
 
                         }
                     }
+                    printTable(cardArr);
                 }
             }
         }
@@ -433,8 +436,8 @@ struct CardArray* setupGame(struct Card* origHead){
         row7prevCard = row7newCard;
 
     }
-    printTable(row1head, row2head, row3head, row4head, row5head, row6head, row7head);
-    struct CardArray* arr;
+
+    struct CardArray *arr;
     arr = (struct CardArray*)malloc(sizeof(struct CardArray));
     arr->head1 = row1head;
     arr->head2 = row2head;
@@ -443,6 +446,8 @@ struct CardArray* setupGame(struct Card* origHead){
     arr->head5 = row5head;
     arr->head6 = row6head;
     arr->head7 = row7head;
+
+    printTable(arr);
     /*arr->f11head = F1head;
     arr->f22head = F2head;
     arr->f33head = F3head;
@@ -452,15 +457,17 @@ struct CardArray* setupGame(struct Card* origHead){
     return arr;
 }
 
-void printTable(struct Card* head1, struct Card* head2, struct Card* head3, struct Card* head4, struct Card* head5,
-        struct Card* head6, struct Card* head7){
-    struct Card* row1 = head1;
-    struct Card* row2 = head2;
-    struct Card* row3 = head3;
-    struct Card* row4 = head4;
-    struct Card* row5 = head5;
-    struct Card* row6 = head6;
-    struct Card* row7 = head7;
+void printTable(struct CardArray* cardArr){
+
+//struct Card* head1, struct Card* head2, struct Card* head3, struct Card* head4, struct Card* head5,
+//        struct Card* head6, struct Card* head7){
+    struct Card* row1 = cardArr->head1;
+    struct Card* row2 = cardArr->head2;
+    struct Card* row3 = cardArr->head3;
+    struct Card* row4 = cardArr->head4;
+    struct Card* row5 = cardArr->head5;
+    struct Card* row6 = cardArr->head6;
+    struct Card* row7 = cardArr->head7;
 
     printf("C1\tC2\tC3\tC4\tC5\tC6\tC7\n\n");
 
@@ -533,25 +540,29 @@ void saveDeck(struct Card* head){
     fclose(file);
 }
 
+// fromColumn og toColumn er altid givet som head
 void moveCards(struct Card* fromColumn, char cardValue, char cardSuit, struct Card* toColumn){
-    struct Card* fromColumnNewCard = fromColumn;
-    struct Card* toColumnNewCard = toColumn;
 
-    while (cardValue != fromColumnNewCard->value || cardSuit != fromColumnNewCard->suit) {
+    while (cardValue != fromColumn->value || cardSuit != fromColumn->suit) {
 
-        fromColumnNewCard = fromColumnNewCard->next;
-        if (fromColumnNewCard == NULL){
+        if (fromColumn->next == NULL){
             printf("Error\n");
             return;
         }
+        if (!fromColumn->shown){
+            fromColumn = fromColumn->next;
+            continue;
+        }
+        fromColumn = fromColumn->next;
     }
 
-    while (toColumnNewCard->next != NULL){
-        toColumnNewCard = toColumnNewCard->next;
+    // finder det sidste kort i toColumn
+    while (toColumn->next != NULL){
+        toColumn = toColumn->next;
     }
-    fromColumnNewCard->previous->next = NULL;
-    toColumnNewCard->next = fromColumnNewCard;
-    fromColumnNewCard->previous = toColumnNewCard;
+    fromColumn->previous->next = NULL;
+    toColumn->next = fromColumn;
+    fromColumn->previous = toColumn;
 
 
 }
